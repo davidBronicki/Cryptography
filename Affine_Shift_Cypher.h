@@ -2,22 +2,20 @@
 
 #include <string>
 
-#include "Character_Set.h"
-
-using namespace std;
+#include "Encoding.h"
 
 class AffineShiftCypher
 {
-	string alphabet;
-	Character factor;
-	Character shift;
+	Alphabet alphabet;
+	ModularNumber factor;
+	ModularNumber shift;
 public:
-	AffineShiftCypher(string inputAlphabet, int inputFactor, int inputShift);
-	string encrypt(string plainText) const;
-	string decrypt(string cypherText) const;
-	void setShift(int input);
-	void setMult(int input);
-	int getShift() const;
-	int getMult() const;
+	AffineShiftCypher(std::string inputAlphabet, long long inputFactor, long long inputShift);
+	std::string encrypt(std::string plainText) const;
+	std::string decrypt(std::string cypherText) const;
+	void setShift(long long input);
+	void setMult(long long input);
+	unsigned long long getShift() const;
+	unsigned long long getMult() const;
 };
 

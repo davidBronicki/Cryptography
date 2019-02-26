@@ -3,46 +3,56 @@
 #include <vector>
 #include <iostream>
 
+using namespace std;
+
 AffineShiftCypher::AffineShiftCypher(
-	string inputAlphabet, int inputFactor, int inputShift)
+	string inputAlphabet, long long inputFactor, long long inputShift)
 :
 	alphabet(inputAlphabet),
-	factor(inputAlphabet, inputFactor),
-	shift(inputAlphabet, inputShift)
+	factor(inputAlphabet.length(), inputFactor),
+	shift(inputAlphabet.length(), inputShift)
 {}
 
 string AffineShiftCypher::encrypt(string plainText) const
 {
-	auto temp = factor.toAbstractCharacters(plainText);
-	vector<Character> output;
-	for (auto item : temp)
+	auto modularValues = alphabet.stringToNumeric(plainText);
+	vector<ModularNumber> output;
+	for (auto value : modularValues)
 	{
-		output.push_back(item * factor + shift);
+		output.push_back(value * factor + shift);
 	}
-	return factor.toString(output);
+	return alphabet.numericToString(output);
 }
 
 string AffineShiftCypher::decrypt(string cypherText) const
 {
-	return cypherText;//not implemented (need division)
+	auto modularValues = alphabet.stringToNumeric(cypherText);
+	vector<ModularNumber> output;
+	for (auto value : modularValues)
+	{
+		output.push_back((value - shift) / factor);
+	}
+	return alphabet.numericToString(output);
 }
 
-void AffineShiftCypher::setShift(int input)
+void AffineShiftCypher::setShift(long long input)
 {
-	shift = Character(alphabet, input);
+	shift = ModularNumber(alphabet.length(), input);
 }
 
-void AffineShiftCypher::setMult(int input)
+void AffineShiftCypher::setMult(long long input)
 {
-	factor = Character(alphabet, input);
+	ModularNumber test(alphabet.length(), input);
+	ModularNumber(alphabet.length(), 1ll)/test;//will throw if there is no inverse
+	factor = test;
 }
 
-int AffineShiftCypher::getShift() const
+unsigned long long AffineShiftCypher::getShift() const
 {
-	return shift.getNumericValue();
+	return (unsigned long long)shift;
 }
 
-int AffineShiftCypher::getMult() const
+unsigned long long AffineShiftCypher::getMult() const
 {
-	return factor.getNumericValue();
+	return (unsigned long long)factor;
 }
