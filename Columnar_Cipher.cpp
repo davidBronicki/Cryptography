@@ -1,4 +1,7 @@
-#include "Columnar_Cypher.h"
+
+//Columnar_Cipher.cpp
+
+#include "Columnar_Cipher.h"
 
 #include <algorithm>
 #include <iostream>
@@ -12,18 +15,18 @@ struct columnSortingHelper
 	string column;
 };
 
-ColumnarCypher::ColumnarCypher()
+ColumnarCipher::ColumnarCipher()
 :
 	alphabet("")
 {}
 
-ColumnarCypher::ColumnarCypher(string inAlphabet, string inKey)
+ColumnarCipher::ColumnarCipher(string inAlphabet, string inKey)
 :
 	alphabet(inAlphabet),
 	key(alphabet.stringToNumeric(inKey))
 {}
 
-string ColumnarCypher::encrypt(string plainText)
+string ColumnarCipher::encrypt(string plainText)
 {
 	vector<columnSortingHelper> columns;
 	for (int i = 0; i < key.size(); ++i)
@@ -52,7 +55,7 @@ string ColumnarCypher::encrypt(string plainText)
 	return output;
 }
 
-string ColumnarCypher::decrypt(string cypherText)
+string ColumnarCipher::decrypt(string cypherText)
 {
 	vector<columnSortingHelper> columns;
 	for (int i = 0; i < key.size(); ++i)
@@ -73,7 +76,7 @@ string ColumnarCypher::decrypt(string cypherText)
 	char* it = &*cypherText.begin();
 	for (int i = 0; i < key.size(); ++i)
 	{
-		if (i < extraChars)
+		if (columns[i].originalPosition < extraChars)
 		{
 			//this is one of the last columns in the unsorted
 			//version, so we add standard amount
@@ -114,12 +117,12 @@ string ColumnarCypher::decrypt(string cypherText)
 	return output;
 }
 
-void ColumnarCypher::setKey(string inputKey)
+void ColumnarCipher::setKey(string inputKey)
 {
 	key = alphabet.forceStringToNumeric(inputKey);
 }
 
-string ColumnarCypher::getKey()
+string ColumnarCipher::getKey()
 {
 	return alphabet.numericToString(key);
 }

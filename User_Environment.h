@@ -1,3 +1,6 @@
+
+//User_Environment.h
+
 #pragma once
 
 #include <string>
@@ -30,6 +33,7 @@ class UserEnvironment
 	string handleInput(const string& input);//return true if exit called
 	void printHelp();
 public:
+	UserEnvironment();
 	UserEnvironment(string inputName, string inputDescription);
 	string enterEnvironment();
 	string enterEnvironment(const string& input);

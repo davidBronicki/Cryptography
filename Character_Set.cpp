@@ -1,3 +1,7 @@
+
+//Character_Set.cpp
+//depricated
+
 #include "Character_Set.h"
 
 string Character::standardLowerCase("abcdefghijklmnopqrstuvwxyz");

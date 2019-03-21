@@ -1,6 +1,10 @@
+
+//ModularUtils.cpp
+
 #include "ModularUtils.h"
 
 #include <exception>
+#include <vector>
 
 #include "NumberTheoryUtils.h"
 
@@ -117,6 +121,22 @@ ModularNumber& ModularNumber::operator*=(const ModularNumber& other)
 ModularNumber& ModularNumber::operator/=(const ModularNumber& other)
 {
 	return *this *= other.inverse();
+}
+
+ModularNumber ModularNumber::exponentiate(ull exponent)
+{
+	ModularNumber output(base, 1ull);
+	ModularNumber binaryExponent(*this);
+	for (int i = 0; i < 64; ++i)
+	{
+		if ((exponent >> i) & 1)//check if ith bit is on
+		{
+			output *= binaryExponent;
+		}
+		if ((exponent >> i+1) == 0) break;//check if any significant bits left
+		binaryExponent *= binaryExponent;
+	}
+	return output;
 }
 
 ModularNumber::operator ModularNumber::ull() const

@@ -1,3 +1,6 @@
+
+//ModularUtils.h
+
 #pragma once
 
 class Alphabet;
@@ -18,9 +21,11 @@ public:
 	ModularNumber(ull inBase, ull inValue, ull inInverse);
 	ModularNumber(ull inBase, ull inValue);
 	ModularNumber(ull inBase, long long inValue);
+
 	ull getBase() const;
 	bool operator<(const ModularNumber& other) const;//to allow for sorting (and alphabetizing)
 	ModularNumber inverse() const;//returns multiplicative inverse
+	
 	ModularNumber operator-() const;
 	template<typename T>
 	ModularNumber& operator+=(T other);
@@ -34,6 +39,9 @@ public:
 	template<typename T>
 	ModularNumber& operator/=(T other);
 	ModularNumber& operator/=(const ModularNumber& other);
+
+	ModularNumber exponentiate(ull exponent);
+
 	operator ull() const;
 };
 

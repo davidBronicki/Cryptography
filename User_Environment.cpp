@@ -1,3 +1,6 @@
+
+//User_Environment.cpp
+
 #include "User_Environment.h"
 
 #include <string>
@@ -57,6 +60,14 @@ UserEnvironment::CallSign UserEnvironment::helpCall(
 	vector<string>{"help", "h"},
 	[](string argument) -> string {return "";});
 
+
+
+
+UserEnvironment::UserEnvironment()
+:
+	name(""),
+	description("")
+{}
 
 UserEnvironment::UserEnvironment(string inputName, string inputDescription)
 :

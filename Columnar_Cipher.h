@@ -1,3 +1,6 @@
+
+//Columnar_Cypher.h
+
 #pragma once
 
 #include <string>
@@ -5,13 +8,13 @@
 
 #include "Encoding.h"
 
-class ColumnarCypher
+class ColumnarCipher
 {
 	Alphabet alphabet;
 	std::vector<ModularNumber> key;
 public:
-	ColumnarCypher();
-	ColumnarCypher(std::string inAlphabet, std::string inKey);
+	ColumnarCipher();
+	ColumnarCipher(std::string inAlphabet, std::string inKey);
 	std::string encrypt(std::string plainText);
 	std::string decrypt(std::string cypherText);
 	void setKey(std::string inputKey);

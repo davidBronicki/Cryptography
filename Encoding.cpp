@@ -1,3 +1,6 @@
+
+//Encoding.cpp
+
 #include "Encoding.h"
 // #include "ModularUtils.h"
 
@@ -97,7 +100,7 @@ vector<ModularNumber> Alphabet::forceStringToNumeric(const string& input) const
 		{
 			output.push_back(charToNumeric(letter));
 		}
-		catch (domain_error e)
+		catch (invalid_argument e)
 		{
 			continue;
 		}
