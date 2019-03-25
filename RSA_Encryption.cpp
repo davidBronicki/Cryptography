@@ -24,27 +24,32 @@ RSA_Encryptor::RSA_Encryptor(us inPrime1, us inPrime2, ul inExponent)
 
 void RSA_Encryptor::setPrime1(us prime)
 {
+	ul newExponentBase = (ul)(prime - 1) * (ul)(prime2 - 1);
+	ModularNumber temp((ull)newExponentBase, (ull)exponent);
+	inverse = (ull)(temp.inverse());//done first so if an error is
+	//thrown, the encryptor will still be in a valid state
 	prime1 = prime;
 	modularBase = (ul)prime1 * (ul)prime2;
-	exponentBase = (ul)(prime1 - 1) * (ul)(prime2 - 1);
-	ModularNumber temp((ull)exponentBase, (ull)exponent);
-	inverse = (ull)(temp.inverse());
+	exponentBase = newExponentBase;
 }
 
 void RSA_Encryptor::setPrime2(us prime)
 {
+	ul newExponentBase = (ul)(prime1 - 1) * (ul)(prime - 1);
+	ModularNumber temp((ull)newExponentBase, (ull)exponent);
+	inverse = (ull)(temp.inverse());//done first so if an error is
+	//thrown, the encryptor will still be in a valid state
 	prime2 = prime;
 	modularBase = (ul)prime1 * (ul)prime2;
-	exponentBase = (ul)(prime1 - 1) * (ul)(prime2 - 1);
-	ModularNumber temp((ull)exponentBase, (ull)exponent);
-	inverse = (ull)(temp.inverse());
+	exponentBase = newExponentBase;
 }
 
 void RSA_Encryptor::setExponent(ul inExponent)
 {
+	ModularNumber temp((ull)exponentBase, (ull)inExponent);
+	inverse = (ull)(temp.inverse());//done first so if an error is
+	//thrown, the encryptor will still be in a valid state
 	exponent = inExponent;
-	ModularNumber temp((ull)exponentBase, (ull)exponent);
-	inverse = (ull)(temp.inverse());
 }
 
 RSA_Encryptor::publicData RSA_Encryptor::publish()

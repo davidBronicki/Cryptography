@@ -9,7 +9,60 @@
 
 using namespace std;
 
-typedef unsigned long long ull;
+template<size_t loopLength, size_t i, typename functionFootprint>
+class UnravelledForLoop
+{
+public:
+	inline static void result(const functionFootprint& loopCodeBlock)
+	{
+		loopCodeBlock(i);
+		UnravelledForLoop<loopLength, i + 1, functionFootprint>::result(loopCodeBlock);
+	}
+};
+
+template<size_t loopLength, typename functionFootprint>
+class UnravelledForLoop<loopLength, loopLength, functionFootprint>
+{
+public:
+	inline static void result(const functionFootprint& loopCodeBlock)
+	{
+		loopCodeBlock(loopLength);
+	}
+};
+
+template<size_t loopLength, typename functionFootprint>
+inline void unravelledForLoop(const functionFootprint& loopCodeBlock)
+{
+	UnravelledForLoop<loopLength - 1, 0, functionFootprint>::result(loopCodeBlock);
+}
+
+
+template<size_t i, typename functionFootprint>
+class ReverseUnravelledForLoop
+{
+public:
+	inline static void result(const functionFootprint& loopCodeBlock)
+	{
+		loopCodeBlock(i);
+		ReverseUnravelledForLoop<i - 1, functionFootprint>::result(loopCodeBlock);
+	}
+};
+
+template<typename functionFootprint>
+class ReverseUnravelledForLoop<0, functionFootprint>
+{
+public:
+	inline static void result(const functionFootprint& loopCodeBlock)
+	{
+		loopCodeBlock(0);
+	}
+};
+
+template<size_t loopLength, typename functionFootprint>
+inline void reverseUnravelledForLoop(const functionFootprint& loopCodeBlock)
+{
+	ReverseUnravelledForLoop<loopLength - 1, functionFootprint>::result(loopCodeBlock);
+}
 
 
 
@@ -17,24 +70,26 @@ template<size_t bit32Length,//number of 32 bit ints composing the number
 	class = enable_if<bit32Length != 0>>//0 size numbers not allowed
 class LargeNumber
 {
+	typedef unsigned long long ull;
+	static const ull mask_32bit = 0xffffffff;
 	ull data[bit32Length];//64 bit numbers are used to make multiplication easier
 public:
 	LargeNumber()
 	{
-		for (int i = 0; i < bit32Length; ++i)
+		unravelledForLoop<bit32Length>([this](size_t i)
 		{
 			data[i] = 0;
-		}
+		});
 	}
 
 	LargeNumber(vector<unsigned int> inputData)
 	{
 		if (inputData.size() != bit32Length) throw invalid_argument(
 			"passed wrongly sized initial data for LargeNumber class");
-		for (int i = 0; i < bit32Length; ++i)
+		unravelledForLoop<bit32Length>([this, &inputData](size_t i)
 		{
 			data[i] = inputData[i];
-		}
+		});
 	}
 
 	vector<unsigned int> getData()
@@ -47,16 +102,38 @@ public:
 		return output;
 	}
 
+	bool operator<(const LargeNumber<bit32Length>& other)
+	{
+		reverseUnravelledForLoop<bit32Length>([this, &other](size_t i)
+		{
+			if (data[i] < other.data[i]) return true;
+			if (data[i] > other.data[i]) return false;
+		});
+		return false;
+	}
+
+	// LargeNumber<bit32Length>& operator<<=(size_t shiftValue)
+	// {
+	// 	ull carryover = 0;
+	// 	unravelledForLoop<bit32Length>([this, shiftValue, &carryover](size_t i)
+	// 	{
+	// 		data[i] <<= shiftValue;
+	// 		data[i] |= carryover;
+	// 		carryover = data >> 32;
+	// 		data[i] &= mask_32bit;
+	// 	})
+	// }
+
 	LargeNumber<bit32Length>& operator+=(const LargeNumber<bit32Length>& other)
 	{
 		bool overflowBit = false;
-		for (int i = 0; i < bit32Length; ++i)
+		unravelledForLoop<bit32Length>([this, &other, &overflowBit](size_t i)
 		{
 			data[i] += other.data[i];
 			if (overflowBit) ++data[i];
 			overflowBit = data[i] >> 32;
-			data[i] &= 0xffffffff;
-		}
+			data[i] &= mask_32bit;
+		});
 		return *this;
 	}
 
@@ -64,13 +141,13 @@ public:
 	{
 		//subtracting a larger number from a smaller is undefined behavior
 		bool underflowBit = false;
-		for (int i = 0; i < bit32Length; ++i)
+		unravelledForLoop<bit32Length>([this, &other, &underflowBit](size_t i)
 		{
 			data[i] -= other.data[i];
 			if (underflowBit) --data[i];
 			underflowBit = data[i] >> 32;
-			data[i] &= 0xffffffff;
-		}
+			data[i] &= mask_32bit;
+		});
 		return *this;
 	}
 
@@ -79,7 +156,7 @@ public:
 		ull currentData[bit32Length];
 		copy(begin(data), end(data), begin(currentData));
 		ull rollover = 0;
-		for (int i = 0; i < bit32Length; ++i)//the place we are calculating for
+		unravelledForLoop<bit32Length>([this, &other, &currentData, &rollover](size_t i)
 		{
 			data[i] = rollover;
 			rollover = 0;
@@ -88,99 +165,102 @@ public:
 				int k = i - j;//index of other data
 				ull temp = currentData[j] * other.data[k];
 				rollover += temp >> 32;
-				data[i] += temp & 0xffffffff;
+				data[i] += temp & mask_32bit;
 			}
 			rollover += data[i] >> 32;
-			data[i] &= 0xffffffff;
-		}
+			data[i] &= mask_32bit;
+		});
 		return *this;
 	}
+
+	// LargeNumber<bit32Length>& operator/=(const LargeNumber<bit32Length>& other)
+	// {
+	// 	ull currentData[bit32Length];
+	// 	copy(begin(data), end(data), begin(currentData));
+		
+	// }
 
 	template<size_t newBit32Length>
 	operator LargeNumber<newBit32Length>()
 	{
 		if (newBit32Length <= bit32Length)
 		{
-			return LargeNumber<newBit32Length>(
-				vector<unsigned int>(begin(data), end(data)));
-					// &data,
-					// (&data) + bit32Length));
+			LargeNumber<newBit32Length> output;
+			copy(begin(data), begin(data) + newBit32Length, begin(output.data));
+			return output;
 		}
 		else
 		{
-			vector<unsigned int> initialData(newBit32Length, 0);
-			for (int i = 0; i < bit32Length; ++i)
-			{
-				initialData[i] = data[i];
-			}
-			return LargeNumber<newBit32Length>(initialData);
+			LargeNumber<newBit32Length> output;
+			copy(begin(data), end(data), begin(output.data));
+			return output;
 		}
 	}
 
 	operator ull()
 	{
 		ull output = data[0];
-		if (bit32Length != 1) output |= data[1] << 32;
+		if (bit32Length != 1) output |= (data[1] << 32);
 		return output;
 	}
 };
 
 
-void unitTest_LargeNumbers()
-{
-	{
-		LargeNumber<2> a({(unsigned int)1 << 31, 0});
-		LargeNumber<2> b({(unsigned int)1 << 31, 0});
-		a += b;
-		if ((ull)a == (ull)1 << 32)
-		{
-			cout << "addition rollover working" << endl;
-		}
-		else
-		{
-			cout << "*****addition rollover not working*****" << endl;
-		}
-	}
-	{
-		LargeNumber<2> a({0, 1});
-		LargeNumber<2> b({1, 0});
-		a -= b;
-		ull check = ((ull)1 << 32) - 1;
-		if ((ull)a == check)
-		{
-			cout << "subtraction carryover working" << endl;
-		}
-		else
-		{
-			cout << "*****subtraction carryover not working*****" << endl;
-		}
-	}
-	{
-		LargeNumber<4> a({(unsigned int)1 << 31, (unsigned int)1 << 31, 0, 0});
-		LargeNumber<4> b({(unsigned int)1 << 31, (unsigned int)1 << 31, 0, 0});
-		a *= b;
-		vector<unsigned int> data(a.getData());
-		bool working = true;
-		working &= data[0] == 0;
-		working &= data[1] == (unsigned int)1 << (31 + 31 - 32);
-		working &= data[2] == (unsigned int)1 << (31 + 31 + 1 + 32 - 64);
-		working &= data[3] == (unsigned int)1 << (31 + 31 + 64 - 96);
-		if (working)
-		{
-			cout << "multiplication rollover working" << endl;
-		}
-		else
-		{
-			cout << "*****multiplication rollover not working*****" << endl;
-		}
-	}
-}
+// void unitTest_LargeNumbers()
+// {
+// 	{
+// 		LargeNumber<2> a({(unsigned int)1 << 31, 0});
+// 		LargeNumber<2> b({(unsigned int)1 << 31, 0});
+// 		a += b;
+// 		if ((ull)a == (ull)1 << 32)
+// 		{
+// 			cout << "addition rollover working" << endl;
+// 		}
+// 		else
+// 		{
+// 			cout << "*****addition rollover not working*****" << endl;
+// 		}
+// 	}
+// 	{
+// 		LargeNumber<2> a({0, 1});
+// 		LargeNumber<2> b({1, 0});
+// 		a -= b;
+// 		ull check = ((ull)1 << 32) - 1;
+// 		if ((ull)a == check)
+// 		{
+// 			cout << "subtraction carryover working" << endl;
+// 		}
+// 		else
+// 		{
+// 			cout << "*****subtraction carryover not working*****" << endl;
+// 		}
+// 	}
+// 	{
+// 		LargeNumber<4> a({(unsigned int)1 << 31, (unsigned int)1 << 31, 0, 0});
+// 		LargeNumber<4> b({(unsigned int)1 << 31, (unsigned int)1 << 31, 0, 0});
+// 		a *= b;
+// 		vector<unsigned int> data(a.getData());
+// 		bool working = true;
+// 		working &= data[0] == 0;
+// 		working &= data[1] == (unsigned int)1 << (31 + 31 - 32);
+// 		working &= data[2] == (unsigned int)1 << (31 + 31 + 1 + 32 - 64);
+// 		working &= data[3] == (unsigned int)1 << (31 + 31 + 64 - 96);
+// 		if (working)
+// 		{
+// 			cout << "multiplication rollover working" << endl;
+// 		}
+// 		else
+// 		{
+// 			cout << "*****multiplication rollover not working*****" << endl;
+// 		}
+// 	}
+// }
 
 
-int main()
-{
-	unitTest_LargeNumbers();
-	return 0;
-}
+// int main()
+// {
+// 	unitTest_LargeNumbers();
+// 	return 0;
+// }
 
 

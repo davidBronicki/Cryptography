@@ -13,6 +13,8 @@
 #include "Character_Set.h"
 #include "Global_Functions.h"
 
+#include "LargeNumbers.h"
+
 #define SET_ENCRYPTION_CALLSIGN(ENVIRONMENT, CRYPTOGRAPHER)\
 ENVIRONMENT.addCallSign("Encrypt a given message.", {"encrypt"},\
 	[&CRYPTOGRAPHER](string arg) -> string\
@@ -40,6 +42,16 @@ UserEnvironment buildGroundEnvironment(
 	RSA_Encryptor& rsaEncryptor, UserEnvironment& rsaEnvironment);
 
 int main(){
+	LargeNumber<4> test1({0, 1<<30, 0, 1});
+	LargeNumber<4> test2({1, 1<<30, 1, 1});
+	test1 += test2;
+	test1 += test2;
+	test1 += test2;
+	for (auto item : test1.getData())
+	{
+		cout << item << endl;
+	}
+
 	AffineShiftCipher affineCipher(Character::standardLowerCase, 1, 0);
 	UserEnvironment affineEnvironment(buildAffineCipherEnvironment(affineCipher));
 
@@ -48,7 +60,7 @@ int main(){
 	UserEnvironment columnarEnvironment(buildColumnarCipherEnvironment(columnarCipher));
 
 
-	RSA_Encryptor rsaEncryptor(3, 5, 1);
+	RSA_Encryptor rsaEncryptor(53359, 13187, 238473277);
 	UserEnvironment rsaEnvironment(buildRSA_EncryptionEnvironment(rsaEncryptor));
 
 
