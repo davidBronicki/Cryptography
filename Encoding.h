@@ -26,3 +26,11 @@ public:
 	std::vector<ModularNumber> forceStringToNumeric(const std::string& input) const;
 	size_t length() const;
 };
+
+class ASCII_Encoder
+{
+public:
+	ASCII_Encoder() = delete;
+	static std::vector<unsigned int> encode(std::string plainText, size_t targetSize);
+	static std::string decode(const std::vector<unsigned int>& code);
+};

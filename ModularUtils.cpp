@@ -133,7 +133,7 @@ ModularNumber ModularNumber::exponentiate(ull exponent)
 		{
 			output *= binaryExponent;
 		}
-		if ((exponent >> i+1) == 0) break;//check if any significant bits left
+		if ((exponent >> (i+1)) == 0) break;//check if any significant bits left
 		binaryExponent *= binaryExponent;
 	}
 	return output;

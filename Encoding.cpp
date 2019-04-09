@@ -112,3 +112,33 @@ size_t Alphabet::length() const
 {
 	return alphabet.length();
 }
+
+
+
+
+
+vector<unsigned int> ASCII_Encoder::encode(string plainText, size_t targetSize)
+{
+	int lengthDifference = targetSize - plainText.length();
+	if (lengthDifference < 0)
+	{
+		plainText = plainText.substr(-lengthDifference);
+	}
+	else
+	{
+		string temp(lengthDifference, '\0');
+		plainText = temp + plainText;
+	}
+	const char* cString = plainText.c_str();
+	unsigned int * data = (unsigned int *)(cString);
+	vector<unsigned int> check(data, data + targetSize/sizeof(unsigned int));
+	return check;
+	// return vector<unsigned int>(data, data + targetSize);
+}
+
+string ASCII_Encoder::decode(const vector<unsigned int>& code)
+{
+	const unsigned int * data= code.data();
+	char* cString = (char*)(data);
+	return string(cString, code.size() * sizeof(unsigned int));
+}
