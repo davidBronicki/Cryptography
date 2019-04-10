@@ -18,32 +18,17 @@ class LargeModularNumber
 
 	static void advancedEuclideanAlgorithmRecursive(vec3& n, vec3& m)
 	{
-		// static int i = 0;
 		//if we reached zero, return previous value
 		if (get<0>(m) == ul::zero()) return;//value in n position (m solved for zero)
 
 		{
-			// ++i;
-			// if (i < 3)
-			// {
-			// 	cout << (get<0>(n) > get<0>(m)) << endl;
-			// }
-			// if (i > 1000)
-			// {
-			// 	cout << i << endl;
-			// 	cout << get<0>(n) << endl << endl;
-			// 	cout << get<0>(m) << endl << endl;
-			// 	cout << (get<0>(n) / get<0>(m)) << endl << endl << endl;
-			// 	// cout << (get<0>(n) > get<0>(m)) << endl << endl << endl;
-			// }
-			// cout << get<0>(n) << endl << endl;
 			ul quotient = get<0>(n) / get<0>(m);
 			vec3 remainder(
 				get<0>(n) - get<0>(m) * quotient,
 				get<1>(n) + get<1>(m) * quotient,
 				get<2>(n) + get<2>(m) * quotient,
 				get<3>(n));//sign always switches so we want to
-				//use !(most previous value), so !get<3>(m).
+				//use !(most recent value), so !get<3>(m).
 				//however because it is alternating throughout,
 				//we can instead use get<3>(n).
 			n = m;
@@ -59,8 +44,6 @@ class LargeModularNumber
 		vec3 b(m, ul::zero(), ul::unity(), false);
 		advancedEuclideanAlgorithmRecursive(a, b);
 		return a;
-		// return advancedEuclideanAlgorithmRecursive(
-		// 	vec3(n, ul(1u), ul(0u), true), vec3(m, ul(0u), ul(1u), false));
 	}
 public:
 	LargeModularNumber(const ul& inValue, const ul& inBase)
@@ -71,8 +54,7 @@ public:
 
 	modNum inverse() const//returns multiplicative inverse
 	{
-		// vec3 euclidResult(advancedEuclideanAlgorithm(ul(value), ul(base)));
-		vec3 euclidResult(advancedEuclideanAlgorithm(ul(base), ul(value)));
+		vec3 euclidResult(advancedEuclideanAlgorithm(ul(value), ul(base)));
 		if (get<0>(euclidResult) == ul::unity())
 		{
 			if (get<3>(euclidResult))
@@ -132,11 +114,6 @@ public:
 				}
 				binaryExponent *= binaryExponent;
 			});
-			// if ((unsigned long long)((exponent >> i) & ul::unity()))//check if ith bit is on
-			// {
-			// 	operator*=(binaryExponent);
-			// }
-			// binaryExponent *= binaryExponent;
 		});
 		return *this;
 	}

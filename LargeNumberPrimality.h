@@ -87,11 +87,6 @@ bool isPrime(const LargeNumber<bit32Length>& input)
 	}
 
 	static vector<num> testCases(buildTestCases(input, 10));
-	// for (int k = 0; k < 5; ++k)
-	// {
-	// 	testCases.push_back(num(generateRandomNumber(
-	// 			num::unity(), input - num::unity())));
-	// }
 
 	for (auto testCase : testCases)
 	{
@@ -167,7 +162,6 @@ LargeNumber<bit32Length> generatePrime(const LargeNumber<bit32Length>& maxSize)
 	testPoint -= (testPoint % preSieveProduct);
 	testPoint -= num::unity();
 	int currentIndex = 0;
-	// if (!((unsigned long long)(testPoint & num::unity()))) testPoint -= num::unity();
 	while(!isPrime(testPoint))
 	{
 		testPoint -= dropLength[currentIndex];

@@ -17,7 +17,7 @@
 #include "LargeRSA.h"
 #include "LargeNumberPrimality.h"
 
-#define primeSize 2
+#define primeSize 16
 
 #define SET_ENCRYPTION_CALLSIGN(ENVIRONMENT, CRYPTOGRAPHER)\
 ENVIRONMENT.addCallSign("Encrypt a given message.", {"encrypt"},\
@@ -48,29 +48,6 @@ UserEnvironment buildGroundEnvironment(
 	Large_RSA_Encryptor<primeSize>& rsaEncryptorLarge, UserEnvironment& rsaEnvironmentLarge);
 
 int main(){
-	// LargeNumber<primeSize> a({
-	// 	0x6b8b4567, 0x327b23c6, 0x643c9869, 0x66334873,
-	// 	0x74b0dc51, 0x19495cff, 0x2ae8944a, 0x625558ec,
-	// 	0x238e1f29, 0x46e87ccd, 0x3d1b58ba, 0x507ed7ab,
-	// 	0x2eb141f2, 0x41b71efb, 0x79e2a9e3, 0x757eb01f
-	// });
-	// LargeNumber<primeSize> b({
-	// 	0x14e17e33, 0x3222e7cd, 0x74de0ee3, 0x68ebc550,
-	// 	0x2df6d648, 0x46b7d447, 0x4a2ac315, 0x39ee015c,
-	// 	0x57fc4fbb, 0x0cc1016f, 0x43f18422, 0x60ef0119,
-	// 	0x26f324ba, 0x7f01579b, 0x49da307d, 0x70ac2a51
-	// });
-
-	// LargeNumber<primeSize*2> c({
-	// 	0x034cf912, 0x0b9a7ca6, 0xa7e16709, 0xbcae11b1,
-	// 	0x88176ee1, 0x15bd55f8, 0x64f5381a, 0x38a23001,
-	// 	0x6e4109b0, 0x49e75a17, 0x536f8012, 0x9a690cef,
-	// 	0x02f1875e, 0x869bcc82, 0x8df710cd, 0xbd0af5a6,
-	// 	0xe970dd54, 0xb0e43d74, 0x7e74316b, 0xddc8d310,
-	// 	0x90050fcf, 0x35fa14d6, 0x87819551, 0x8ea3d4c4,
-	// 	0x01737ed1, 0x856f6dbc, 0xa80d2d14, 0x5b11f2d7,
-	// 	0xf828dab0, 0x5b265ae3, 0xb2ce4803, 0xbdb3085b
-	// })
 
 	AffineShiftCipher affineCipher(Character::standardLowerCase, 1, 0);
 	UserEnvironment affineEnvironment(buildAffineCipherEnvironment(affineCipher));
@@ -83,35 +60,27 @@ int main(){
 	RSA_Encryptor rsaEncryptor(53359, 13187, 238473277);
 	UserEnvironment rsaEnvironment(buildRSA_EncryptionEnvironment(rsaEncryptor));
 
-	// Large_RSA_Encryptor<primeSize> rsaEncryptorLarge(
-	// 	LargeNumber<primeSize>({
-	// 		0x6b8b4567, 0x327b23c6, 0x643c9869, 0x66334873,
-	// 		0x74b0dc51, 0x19495cff, 0x2ae8944a, 0x625558ec,
-	// 		0x238e1f29, 0x46e87ccd, 0x3d1b58ba, 0x507ed7ab,
-	// 		0x2eb141f2, 0x41b71efb, 0x79e2a9e3, 0x757eb01f}),//<-big prime
-	// 	LargeNumber<primeSize>({
-	// 		0x14e17e33, 0x3222e7cd, 0x74de0ee3, 0x68ebc550,
-	// 		0x2df6d648, 0x46b7d447, 0x4a2ac315, 0x39ee015c,
-	// 		0x57fc4fbb, 0x0cc1016f, 0x43f18422, 0x60ef0119,
-	// 		0x26f324ba, 0x7f01579b, 0x49da307d, 0x70ac2a51}),//<-big prime
-	// 	LargeNumber<2*primeSize>({
-	// 		0x034cf912, 0x0b9a7ca6, 0xa7e16709, 0xbcae11b1,
-	// 		0x88176ee1, 0x15bd55f8, 0x64f5381a, 0x38a23001,
-	// 		0x6e4109b0, 0x49e75a17, 0x536f8012, 0x9a690cef,
-	// 		0x02f1875e, 0x869bcc82, 0x8df710cd, 0xbd0af5a6,
-	// 		0xe970dd54, 0xb0e43d74, 0x7e74316b, 0xddc8d310,
-	// 		0x90050fcf, 0x35fa14d6, 0x87819551, 0x8ea3d4c4,
-	// 		0x01737ed1, 0x856f6dbc, 0xa80d2d14, 0x5b11f2d7,
-	// 		0xf828dab0, 0x5b265ae3, 0xb2ce4803, 0xbdb3085b})//<-really big prime
-	// 	);
 	Large_RSA_Encryptor<primeSize> rsaEncryptorLarge(
 		LargeNumber<primeSize>({
-			0xdc95547e, 0x301f78c7}),//<-big prime
+			0x6b8b4567, 0x327b23c6, 0x643c9869, 0x66334873,
+			0x74b0dc51, 0x19495cff, 0x2ae8944a, 0x625558ec,
+			0x238e1f29, 0x46e87ccd, 0x3d1b58ba, 0x507ed7ab,
+			0x2eb141f2, 0x41b71efb, 0x79e2a9e3, 0x757eb01f}),//<-big prime
 		LargeNumber<primeSize>({
-			0xa9cb8451, 0xa3ee3389}),//<-big prime
+			0x14e17e33, 0x3222e7cd, 0x74de0ee3, 0x68ebc550,
+			0x2df6d648, 0x46b7d447, 0x4a2ac315, 0x39ee015c,
+			0x57fc4fbb, 0x0cc1016f, 0x43f18422, 0x60ef0119,
+			0x26f324ba, 0x7f01579b, 0x49da307d, 0x70ac2a51}),//<-big prime
 		LargeNumber<2*primeSize>({
-			0x034cf912, 0x0b9a7ca6, 0xa7e16709, 0xbcae11b1})//<-really big prime
-		);
+			0x034cf912, 0x0b9a7ca6, 0xa7e16709, 0xbcae11b1,
+			0x88176ee1, 0x15bd55f8, 0x64f5381a, 0x38a23001,
+			0x6e4109b0, 0x49e75a17, 0x536f8012, 0x9a690cef,
+			0x02f1875e, 0x869bcc82, 0x8df710cd, 0xbd0af5a6,
+			0xe970dd54, 0xb0e43d74, 0x7e74316b, 0xddc8d310,
+			0x90050fcf, 0x35fa14d6, 0x87819551, 0x8ea3d4c4,
+			0x01737ed1, 0x856f6dbc, 0xa80d2d14, 0x5b11f2d7,
+			0xf828dab0, 0x5b265ae3, 0xb2ce4803, 0xbdb3085b})//<-really big prime for exponent
+	);
 	UserEnvironment rsaEnvironmentLarge(buildLargeRSA_EncryptionEnvironment(rsaEncryptorLarge));
 
 
@@ -395,10 +364,7 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	rsaEnvironment.addCallSign("Encrypt a given message of 124 characters or less.", {"encrypt"},
 		[&rsaEncryptor](string arg) -> string
 		{
-			cout << "Encoded: " << rsaEncryptor.encode(arg) << endl << endl;
-			cout << "Full Cycle: " << rsaEncryptor.decrypt(rsaEncryptor.encrypt(rsaEncryptor.encode(arg))) << endl << endl;
-			auto encryptedValue= rsaEncryptor.encrypt(rsaEncryptor.encode(arg));
-			cout << "EncryptionValue: " << encryptedValue << endl;
+			cout << "Encrypted Value: " << rsaEncryptor.encrypt(rsaEncryptor.encode(arg)) << endl;
 			return "";
 		});
 
@@ -423,21 +389,16 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 			}
 			if (inputValues.size() > primeSize * 2)
 			{
-				cout << "decreasing size" << endl;
 				inputValues = vector<unsigned int>(
 					inputValues.begin() + (inputValues.size() - primeSize * 2), inputValues.end());
 			}
 			else if (inputValues.size() < primeSize * 2)
 			{
-				cout << "increasing size" << endl;
 				inputValues.insert(inputValues.begin(), primeSize * 2 - inputValues.size(),
 					0);
 			}
-			cout << inputValues.size() << endl;
 			LargeNumber<2 * primeSize> encryptedValue(inputValues);
-			cout << "decoded: " << rsaEncryptor.decode(encryptedValue) << endl << endl;
-			cout << "decrypted: " << rsaEncryptor.decrypt(encryptedValue) << endl << endl;
-			cout << "Decrypted Value: " << rsaEncryptor.decode(rsaEncryptor.decrypt(encryptedValue)) << endl;
+			cout << "Decrypted Text: " << rsaEncryptor.decode(rsaEncryptor.decrypt(encryptedValue)) << endl;
 			return "";
 		});
 

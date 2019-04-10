@@ -23,12 +23,9 @@ public:
 		exponent(inExponent)
 	{
 		modularBase = ul(inPrime1) * ul(inPrime2);
-		exponentBase = ul(inPrime1 - us::unity()) * (ul)(inPrime2 - us::unity());
+		exponentBase = ul(inPrime1 - us::unity()) * ul(inPrime2 - us::unity());
 		LargeModularNumber<primeNumberSize * 2> temp(exponent, exponentBase);
 		inverse = (ul)(temp.inverse());
-		cout << exponent << endl;
-		cout << inverse << endl;
-		cout << exponentBase << endl;
 	}
 
 	bool setExponent(const us& inExponent)

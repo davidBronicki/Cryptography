@@ -621,3 +621,9 @@ LargeNumber<bit32Length> operator/(LargeNumber<bit32Length> lhs, const LargeNumb
 	return lhs /= rhs;
 }
 
+template<size_t bit32Length>
+LargeNumber<bit32Length> operator%(LargeNumber<bit32Length> lhs, const LargeNumber<bit32Length>& rhs)
+{
+	return lhs %= rhs;
+}
+
