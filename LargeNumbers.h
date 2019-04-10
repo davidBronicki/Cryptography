@@ -532,7 +532,7 @@ LargeNumber<bit32Length>& LargeNumber<bit32Length, sizeCheck>::operator/=(const 
 	// else if (mostSignificantWordPosition == bit32Length - 1)
 	// {
 	// 	*this = LargeNumber<bit32Length>(data[mostSignificantWordPosition]
-	// 		/ other.data[mostSignificantWordPosition]);
+	// 		/ other.data[mostSignificantWordPositinon]);
 	// 	return *this;
 	// }
 
@@ -547,7 +547,7 @@ LargeNumber<bit32Length>& LargeNumber<bit32Length, sizeCheck>::operator/=(const 
 		bitshiftQuantity = 32u * mostSignificantWordPosition;
 	}
 
-	ull mostSignificantWord = (ull)(other >> bitshiftQuantity) + 1;
+	ull mostSignificantWord = (ull)(other >> bitshiftQuantity);
 
 	LargeNumber<bit32Length> oldData(*this);
 	operator>>=(bitshiftQuantity);
@@ -564,12 +564,18 @@ LargeNumber<bit32Length>& LargeNumber<bit32Length, sizeCheck>::operator/=(const 
 	}
 
 	LargeNumber<bit32Length> cutoff(other);
-	cutoff <<= 1u;//algorithm only guarantees within 2*divisor
+	// LargeNumber<bit32Length> reverseCutoff(LargeNumber<bit32Length>::zero() - cutoff);//artificial negative number
+	// cutoff <<= 1u;//algorithm only guarantees within 2*divisor
+	bool negative = oldData < *this * other;
 
-	LargeNumber<bit32Length> remainder(oldData - *this * other);//r_0 = a - q_0 * b
+	LargeNumber<bit32Length> remainder(
+		negative ?
+		*this * other - oldData :
+		oldData - *this * other);//r_0 = a - q_0 * b
 
-	while (remainder >= cutoff)
+	while (remainder >= cutoff)// && remainder < reverseCutoff)
 	{
+		// cout << remainder << endl;
 		//use most significant word to perform division and obtain new quotient approximation.
 		//then find new remainder and use resulting remainder to find more precise approximation.
 		remainder >>= bitshiftQuantity;
@@ -580,14 +586,31 @@ LargeNumber<bit32Length>& LargeNumber<bit32Length, sizeCheck>::operator/=(const 
 			remainder.data[i] = temp / mostSignificantWord;
 			smallRemainder = temp - remainder.data[i] * mostSignificantWord;
 		});
-		operator+=(remainder);
-		remainder = oldData - *this * other;
+		negative ? operator-=(remainder) : operator+=(remainder);
+
+		LargeNumber<bit32Length> newGuess(*this * other);
+		negative = oldData < newGuess;
+		remainder = negative ?
+			newGuess - oldData :
+			oldData - newGuess;
+
+		// remainder = oldData - *this * other;
 	}
 
-	if (remainder >= other)//check if in proper range
+	if (negative && remainder != LargeNumber<bit32Length>::zero())
 	{
-		operator+=(LargeNumber<bit32Length>::unity());
+		operator-=(LargeNumber<bit32Length>::unity());
 	}
+
+	// if (remainder >= other)//check if in proper range
+	// {
+	// 	operator+=(LargeNumber<bit32Length>::unity());
+	// }
+
+	// if (remainder >= reverseCutoff)//check if in proper range
+	// {
+	// 	operator-=(LargeNumber<bit32Length>::unity());
+	// }
 
 	return *this;
 }

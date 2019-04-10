@@ -17,7 +17,7 @@
 #include "LargeRSA.h"
 #include "LargeNumberPrimality.h"
 
-#define primeSize 16
+#define primeSize 2
 
 #define SET_ENCRYPTION_CALLSIGN(ENVIRONMENT, CRYPTOGRAPHER)\
 ENVIRONMENT.addCallSign("Encrypt a given message.", {"encrypt"},\
@@ -48,119 +48,79 @@ UserEnvironment buildGroundEnvironment(
 	Large_RSA_Encryptor<primeSize>& rsaEncryptorLarge, UserEnvironment& rsaEnvironmentLarge);
 
 int main(){
-
-	typedef LargeNumber<4> num;
-
-	// num a({0x23842232, 0x47323423, 0x83916578, 0x91029579});
-	// num b({0x00012123, 0xabcdef12, 0x2301fba8, 0x9112febc});
-	// cout << (a/b) << endl;
-	// cout << hex << (0x23842232/0x00012123) << dec << endl;
-
-	cout << (num::maxInt() / num::maxInt()) << endl;
-
-	// const size_t primeSize = 8;
-
-	// typedef LargeNumber<primeSize> primeNum;
-	// typedef LargeNumber<primeSize * 2> modBaseNum;
-	// // typedef
-
-	// primeNum p1(generatePrime(primeNum::maxInt()));
-	// primeNum p2(generatePrime(primeNum::maxInt()));
-
-	// cout << "reached" << endl;
-
-	// Large_RSA_Encryptor<primeSize> testEncryptor(p1, p2, modBaseNum::unity());
-
-	// cout << "reached" << endl;
-
-	// while(!(testEncryptor.setExponent(generateRandomNumber(
-	// 	modBaseNum::unity(), testEncryptor.getExponentBase()))))
-	// {
-	// 	cout << "doing something" << endl;
-	// }
-	// auto temp = testEncryptor.decode(testEncryptor.decrypt(
-	// 	testEncryptor.encrypt(testEncryptor.encode("abcdefghijklmnopqrstuvwxyz"))));
-	// cout << temp << endl;
-
-	// Large_RSA_Encryptor<4> testEncryptor(
-	// 	LargeNumber<4>({0x5FC591F8, 0x9068E88C, 0xE1D610C0, 0x59D0598D}),
-	// 	LargeNumber<4>({0xE0F1EA21, 0xC306376F, 0x0C1572D3, 0x4F4AB4A1}),
-	// 	LargeNumber<8>({0x31277B47, 0xD2EBC175, 0x7E542D69, 0x1700DAC9,
-	// 					0xE5D4B275, 0x80E8CB16, 0x38DE03F4, 0x5967504D}));
-
-	// auto temp = testEncryptor.decode(testEncryptor.decrypt(
-	// 	testEncryptor.encrypt(testEncryptor.encode("abcdefghijklmnopqrstuvwxyz"))));
-
-	// cout << temp << endl;
 	// LargeNumber<primeSize> a({
-	// 	0x44c972ae, 0x4f5d0597, 0x439d4af3, 0x384a3464,
-	// 	0x55f5f29b, 0x22e5bb2c, 0x604989f8, 0x07cea81b,
-	// 	0x73272b61, 0x0be1a3b2, 0x7d1426b7, 0x56d5179e,
-	// 	0x52c46260, 0x74191f49, 0x3899d23b, 0xccb6ab1});
-	// LargeNumber<primeSize> b({
 	// 	0x6b8b4567, 0x327b23c6, 0x643c9869, 0x66334873,
-	// 	0x74b0dc51, 0x19495cff, 0x2ae8944a, 0x625558ec, 
+	// 	0x74b0dc51, 0x19495cff, 0x2ae8944a, 0x625558ec,
 	// 	0x238e1f29, 0x46e87ccd, 0x3d1b58ba, 0x507ed7ab,
-	// 	0x2eb141f2, 0x41b71efb, 0x79e2a9e3, 0x757eb01f});
+	// 	0x2eb141f2, 0x41b71efb, 0x79e2a9e3, 0x757eb01f
+	// });
+	// LargeNumber<primeSize> b({
+	// 	0x14e17e33, 0x3222e7cd, 0x74de0ee3, 0x68ebc550,
+	// 	0x2df6d648, 0x46b7d447, 0x4a2ac315, 0x39ee015c,
+	// 	0x57fc4fbb, 0x0cc1016f, 0x43f18422, 0x60ef0119,
+	// 	0x26f324ba, 0x7f01579b, 0x49da307d, 0x70ac2a51
+	// });
 
 	// LargeNumber<primeSize*2> c({
-	// 	0x0d7168ac 0xe64f6478 0xcc87930d 0x2cc6690e
-	// 	0x6e961b8a 0x23292b9f 0xe55d1289 0x4c4aab1d
-	// 	0x8471c3e5 0x28dd0f99 0xa7a36b17 0x4a0fdaf5
-	// 	0x65d6283e 0x4836e3df 0x6f3c553c 0x6ea8bc28
-	// 	0xca2be00f 0x8b7a0c58 0x4244010a 0x89b624ff
-	// 	0x0042c463 0x63e2dd3d 0x023219bc 0xecdde871
-	// 	0xa281c1ee 0xc66a44ab 0x42139f25 0xc1bdae4c
-	// 	0x6ffb9846 0x637dfaf3 0xe834f899 0x2dcedf8b
+	// 	0x034cf912, 0x0b9a7ca6, 0xa7e16709, 0xbcae11b1,
+	// 	0x88176ee1, 0x15bd55f8, 0x64f5381a, 0x38a23001,
+	// 	0x6e4109b0, 0x49e75a17, 0x536f8012, 0x9a690cef,
+	// 	0x02f1875e, 0x869bcc82, 0x8df710cd, 0xbd0af5a6,
+	// 	0xe970dd54, 0xb0e43d74, 0x7e74316b, 0xddc8d310,
+	// 	0x90050fcf, 0x35fa14d6, 0x87819551, 0x8ea3d4c4,
+	// 	0x01737ed1, 0x856f6dbc, 0xa80d2d14, 0x5b11f2d7,
+	// 	0xf828dab0, 0x5b265ae3, 0xb2ce4803, 0xbdb3085b
 	// })
 
-	// typedef LargeNumber<primeSize*2> primeNum;
-	// // cout << generatePrime(primeNum::maxInt()) << endl << endl;
-	// cout << generatePrime(primeNum(a)*primeNum(b)) << endl;
-
-	// return 0;
-
-	// AffineShiftCipher affineCipher(Character::standardLowerCase, 1, 0);
-	// UserEnvironment affineEnvironment(buildAffineCipherEnvironment(affineCipher));
+	AffineShiftCipher affineCipher(Character::standardLowerCase, 1, 0);
+	UserEnvironment affineEnvironment(buildAffineCipherEnvironment(affineCipher));
 
 
-	// ColumnarCipher columnarCipher(Character::standardLowerCase, "abcde");
-	// UserEnvironment columnarEnvironment(buildColumnarCipherEnvironment(columnarCipher));
+	ColumnarCipher columnarCipher(Character::standardLowerCase, "abcde");
+	UserEnvironment columnarEnvironment(buildColumnarCipherEnvironment(columnarCipher));
 
 
-	// RSA_Encryptor rsaEncryptor(53359, 13187, 238473277);
-	// UserEnvironment rsaEnvironment(buildRSA_EncryptionEnvironment(rsaEncryptor));
+	RSA_Encryptor rsaEncryptor(53359, 13187, 238473277);
+	UserEnvironment rsaEnvironment(buildRSA_EncryptionEnvironment(rsaEncryptor));
 
 	// Large_RSA_Encryptor<primeSize> rsaEncryptorLarge(
 	// 	LargeNumber<primeSize>({
-	// 		0x44c972ae, 0x4f5d0597, 0x439d4af3, 0x384a3464,//prime 1
-	// 		0x55f5f29b, 0x22e5bb2c, 0x604989f8, 0x07cea81b,
-	// 		0x73272b61, 0x0be1a3b2, 0x7d1426b7, 0x56d5179e,
-	// 		0x52c46260, 0x74191f49, 0x3899d23b, 0x0ccb6ab1}),//<-big prime
-	// 	LargeNumber<primeSize>({
-	// 		0x6b8b4567, 0x327b23c6, 0x643c9869, 0x66334873,//prime 2
-	// 		0x74b0dc51, 0x19495cff, 0x2ae8944a, 0x625558ec, 
+	// 		0x6b8b4567, 0x327b23c6, 0x643c9869, 0x66334873,
+	// 		0x74b0dc51, 0x19495cff, 0x2ae8944a, 0x625558ec,
 	// 		0x238e1f29, 0x46e87ccd, 0x3d1b58ba, 0x507ed7ab,
 	// 		0x2eb141f2, 0x41b71efb, 0x79e2a9e3, 0x757eb01f}),//<-big prime
+	// 	LargeNumber<primeSize>({
+	// 		0x14e17e33, 0x3222e7cd, 0x74de0ee3, 0x68ebc550,
+	// 		0x2df6d648, 0x46b7d447, 0x4a2ac315, 0x39ee015c,
+	// 		0x57fc4fbb, 0x0cc1016f, 0x43f18422, 0x60ef0119,
+	// 		0x26f324ba, 0x7f01579b, 0x49da307d, 0x70ac2a51}),//<-big prime
 	// 	LargeNumber<2*primeSize>({
-	// 		0x0d7168ac, 0xe64f6478, 0xcc87930d, 0x2cc6690e,//exponent
-	// 		0x6e961b8a, 0x23292b9f, 0xe55d1289, 0x4c4aab1d,
-	// 		0x8471c3e5, 0x28dd0f99, 0xa7a36b17, 0x4a0fdaf5,
-	// 		0x65d6283e, 0x4836e3df, 0x6f3c553c, 0x6ea8bc28,
-	// 		0xca2be00f, 0x8b7a0c58, 0x4244010a, 0x89b624ff,
-	// 		0x0042c463, 0x63e2dd3d, 0x023219bc, 0xecdde871,
-	// 		0xa281c1ee, 0xc66a44ab, 0x42139f25, 0xc1bdae4c,
-	// 		0x6ffb9846, 0x637dfaf3, 0xe834f899, 0x2dcedf8b})//<-really big prime
+	// 		0x034cf912, 0x0b9a7ca6, 0xa7e16709, 0xbcae11b1,
+	// 		0x88176ee1, 0x15bd55f8, 0x64f5381a, 0x38a23001,
+	// 		0x6e4109b0, 0x49e75a17, 0x536f8012, 0x9a690cef,
+	// 		0x02f1875e, 0x869bcc82, 0x8df710cd, 0xbd0af5a6,
+	// 		0xe970dd54, 0xb0e43d74, 0x7e74316b, 0xddc8d310,
+	// 		0x90050fcf, 0x35fa14d6, 0x87819551, 0x8ea3d4c4,
+	// 		0x01737ed1, 0x856f6dbc, 0xa80d2d14, 0x5b11f2d7,
+	// 		0xf828dab0, 0x5b265ae3, 0xb2ce4803, 0xbdb3085b})//<-really big prime
 	// 	);
-	// UserEnvironment rsaEnvironmentLarge(buildLargeRSA_EncryptionEnvironment(rsaEncryptorLarge));
+	Large_RSA_Encryptor<primeSize> rsaEncryptorLarge(
+		LargeNumber<primeSize>({
+			0xdc95547e, 0x301f78c7}),//<-big prime
+		LargeNumber<primeSize>({
+			0xa9cb8451, 0xa3ee3389}),//<-big prime
+		LargeNumber<2*primeSize>({
+			0x034cf912, 0x0b9a7ca6, 0xa7e16709, 0xbcae11b1})//<-really big prime
+		);
+	UserEnvironment rsaEnvironmentLarge(buildLargeRSA_EncryptionEnvironment(rsaEncryptorLarge));
 
 
-	// UserEnvironment groundEnvironment(buildGroundEnvironment(
-	// 	affineCipher, affineEnvironment,
-	// 	columnarCipher, columnarEnvironment,
-	// 	rsaEncryptor, rsaEnvironment,
-	// 	rsaEncryptorLarge, rsaEnvironmentLarge));
-	// groundEnvironment.enterEnvironment();
+	UserEnvironment groundEnvironment(buildGroundEnvironment(
+		affineCipher, affineEnvironment,
+		columnarCipher, columnarEnvironment,
+		rsaEncryptor, rsaEnvironment,
+		rsaEncryptorLarge, rsaEnvironmentLarge));
+	groundEnvironment.enterEnvironment();
 	return 0;
 }
 
@@ -435,26 +395,51 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	rsaEnvironment.addCallSign("Encrypt a given message of 124 characters or less.", {"encrypt"},
 		[&rsaEncryptor](string arg) -> string
 		{
+			cout << "Encoded: " << rsaEncryptor.encode(arg) << endl << endl;
+			cout << "Full Cycle: " << rsaEncryptor.decrypt(rsaEncryptor.encrypt(rsaEncryptor.encode(arg))) << endl << endl;
 			auto encryptedValue= rsaEncryptor.encrypt(rsaEncryptor.encode(arg));
 			cout << "EncryptionValue: " << encryptedValue << endl;
 			return "";
 		});
 
 	// //decryption callsign
-	// rsaEnvironment.addCallSign("Decrypt a given number.", {"decrypt"},
-	// 	[&rsaEncryptor](string arg) -> string
-	// 	{
-	// 		try
-	// 		{
-	// 			unsigned long inputNumber = stoul(arg);
-	// 			cout << "Encrypted Number: " << rsaEncryptor.decrypt(inputNumber) << endl;
-	// 		}
-	// 		catch(...)
-	// 		{
-	// 			cout << "Invalid value given. Must be an unsigned integer" << endl;
-	// 		}
-	// 		return "";
-	// 	});
+	rsaEnvironment.addCallSign("Decrypt a given number into a plaintext message.", {"decrypt"},
+		[&rsaEncryptor](string arg) -> string
+		{
+			vector<string> inputStrings(parse(arg));
+			vector<unsigned int> inputValues;
+			try
+			{
+				for (string input : inputStrings)
+				{
+					// cout << stoul("0x" + input) << endl;
+					inputValues.push_back(stoul("0x" + input, nullptr, 16));
+				}
+			}
+			catch(...)
+			{
+				cout << "Invalid arguments. Give a space separated list of hexadecimal numbers." << endl;
+				return "";
+			}
+			if (inputValues.size() > primeSize * 2)
+			{
+				cout << "decreasing size" << endl;
+				inputValues = vector<unsigned int>(
+					inputValues.begin() + (inputValues.size() - primeSize * 2), inputValues.end());
+			}
+			else if (inputValues.size() < primeSize * 2)
+			{
+				cout << "increasing size" << endl;
+				inputValues.insert(inputValues.begin(), primeSize * 2 - inputValues.size(),
+					0);
+			}
+			cout << inputValues.size() << endl;
+			LargeNumber<2 * primeSize> encryptedValue(inputValues);
+			cout << "decoded: " << rsaEncryptor.decode(encryptedValue) << endl << endl;
+			cout << "decrypted: " << rsaEncryptor.decrypt(encryptedValue) << endl << endl;
+			cout << "Decrypted Value: " << rsaEncryptor.decode(rsaEncryptor.decrypt(encryptedValue)) << endl;
+			return "";
+		});
 
 	// //change first prime callsign
 	// rsaEnvironment.addCallSign("Change the first prime number.", {"prime1", "p1"},

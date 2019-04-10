@@ -20,7 +20,7 @@ class LargeModularNumber
 	{
 		// static int i = 0;
 		//if we reached zero, return previous value
-		if (get<0>(m) == ul(0)) return;//value in n position (m solved for zero)
+		if (get<0>(m) == ul::zero()) return;//value in n position (m solved for zero)
 
 		{
 			// ++i;
@@ -55,8 +55,8 @@ class LargeModularNumber
 	//user side entry point
 	static vec3 advancedEuclideanAlgorithm(ul n, ul m)
 	{
-		vec3 a(n, ul(1u), ul(0u), true);
-		vec3 b(m, ul(0u), ul(1u), false);
+		vec3 a(n, ul::unity(), ul::zero(), true);
+		vec3 b(m, ul::zero(), ul::unity(), false);
 		advancedEuclideanAlgorithmRecursive(a, b);
 		return a;
 		// return advancedEuclideanAlgorithmRecursive(
@@ -73,7 +73,7 @@ public:
 	{
 		// vec3 euclidResult(advancedEuclideanAlgorithm(ul(value), ul(base)));
 		vec3 euclidResult(advancedEuclideanAlgorithm(ul(base), ul(value)));
-		if (get<0>(euclidResult) == ul(1u))
+		if (get<0>(euclidResult) == ul::unity())
 		{
 			if (get<3>(euclidResult))
 			{
