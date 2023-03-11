@@ -1,7 +1,5 @@
 #pragma once
 
-// #include <tuple>
-
 #include "LargeNumbers.hpp"
 
 template<size_t bit32Length>
@@ -19,18 +17,18 @@ class LargeModularNumber
 	static void advancedEuclideanAlgorithmRecursive(vec3& n, vec3& m)
 	{
 		//if we reached zero, return previous value
-		if (get<0>(m) == ul::zero()) return;//value in n position (m solved for zero)
+		if (std::get<0>(m) == ul::zero()) return;//value in n position (m solved for zero)
 
 		{
-			ul quotient = get<0>(n) / get<0>(m);
+			ul quotient = std::get<0>(n) / std::get<0>(m);
 			vec3 remainder(
-				get<0>(n) - get<0>(m) * quotient,
-				get<1>(n) + get<1>(m) * quotient,
-				get<2>(n) + get<2>(m) * quotient,
-				get<3>(n));//sign always switches so we want to
-				//use !(most recent value), so !get<3>(m).
+				std::get<0>(n) - std::get<0>(m) * quotient,
+				std::get<1>(n) + std::get<1>(m) * quotient,
+				std::get<2>(n) + std::get<2>(m) * quotient,
+				std::get<3>(n));//sign always switches so we want to
+				//use !(most recent value), so !std::get<3>(m).
 				//however because it is alternating throughout,
-				//we can instead use get<3>(n).
+				//we can instead use std::get<3>(n).
 			n = m;
 			m = remainder;
 		}
@@ -48,22 +46,22 @@ class LargeModularNumber
 public:
 	LargeModularNumber(const ul& inValue, const ul& inBase)
 	:
-		value(inValue),
-		base(inBase)
+		base(inBase),
+		value(inValue)
 	{}
 
 	modNum inverse() const//returns multiplicative inverse
 	{
 		vec3 euclidResult(advancedEuclideanAlgorithm(ul(value), ul(base)));
-		if (get<0>(euclidResult) == ul::unity())
+		if (std::get<0>(euclidResult) == ul::unity())
 		{
-			if (get<3>(euclidResult))
+			if (std::get<3>(euclidResult))
 			{
-				return modNum(get<1>(euclidResult), base);
+				return modNum(std::get<1>(euclidResult), base);
 			}
 			else
 			{
-				modNum temp(get<1>(euclidResult), base);
+				modNum temp(std::get<1>(euclidResult), base);
 				return -temp;
 			}
 		}

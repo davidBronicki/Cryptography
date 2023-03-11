@@ -3,7 +3,10 @@
 #include <math.h>
 #include <iostream>
 
-using std::tuple, std::vector, ntu::PrimeNumbers;
+using std::tuple;
+using std::vector;
+using std::get;
+using ntu::PrimeNumbers;
 
 typedef tuple<long long, long long, long long> vec3;
 

@@ -5,6 +5,8 @@
 
 #include "NumberTheoryUtils.hpp"
 
+using std::get;
+
 ModularNumber::ModularNumber()
 :
 	base(1),

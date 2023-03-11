@@ -1,6 +1,3 @@
-
-//Cryptography_Main.cpp
-
 #include <string>
 #include <vector>
 #include <iostream>
@@ -10,14 +7,13 @@
 #include "Affine_Shift_Cipher.hpp"
 #include "Columnar_Cipher.hpp"
 #include "RSA_Encryption.hpp"
-#include "Character_Set.hpp"
 #include "Global_Functions.hpp"
 
-// #include "LargeNumbers.h"
+#include "LargeNumbers.hpp"
 #include "LargeRSA.hpp"
 #include "LargeNumberPrimality.hpp"
 
-#define primeSize 16
+constexpr size_t primeSize = 16;
 
 #define SET_ENCRYPTION_CALLSIGN(ENVIRONMENT, CRYPTOGRAPHER)\
 ENVIRONMENT.addCallSign("Encrypt a given message.", {"encrypt"},\
@@ -196,14 +192,14 @@ our alphabet and is the final output (cipher text).");
 			auto clip = clipOne(input);
 			try
 			{
-				affineCipher.setMult(stoll(get<0>(clip)));
+				affineCipher.setMult(stoll(std::get<0>(clip)));
 				std::cout << "Multiplier changed to " << affineCipher.getMult() << "\n";
 			}
 			catch(...)
 			{
 				std::cout << "Invalid value given. Multiplier must be an integer and have no common divisors with length of alphabet." << "\n";
 			}
-			return get<1>(clip);
+			return std::get<1>(clip);
 		});
 	affineEnvironment.addCallSign("Change shift.", {"shift"},
 		[&affineCipher](std::string input) -> std::string
@@ -211,14 +207,14 @@ our alphabet and is the final output (cipher text).");
 			auto clip = clipOne(input);//grab the first word from input
 			try
 			{
-				affineCipher.setShift(stoll(get<0>(clip)));
+				affineCipher.setShift(stoll(std::get<0>(clip)));
 				std::cout << "Shift changed to " << affineCipher.getShift() << "\n";
 			}
 			catch(...)
 			{
 				std::cout << "Invalid value given. Shift must be an integer." << "\n";
 			}
-			return get<1>(clip);
+			return std::get<1>(clip);
 		});
 	return affineEnvironment;
 }
@@ -238,14 +234,14 @@ serves as a user interface with an columnar encryptor and decryptor. ");
 			auto clip = clipOne(input);//grab the first word from input
 			try
 			{
-				columnarCipher.setKey(get<0>(clip));
+				columnarCipher.setKey(std::get<0>(clip));
 				std::cout << "Key changed to " << columnarCipher.getKey() << "\n";
 			}
 			catch(...)
 			{
 				std::cout << "Invalid value given." << "\n";
 			}
-			return get<1>(clip);
+			return std::get<1>(clip);
 		});
 	return columnarEnvironment;
 }
@@ -295,7 +291,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 			auto clip = clipOne(input);//grab the first word from input
 			try
 			{
-				rsaEncryptor.setPrime1(stoul(get<0>(clip)));
+				rsaEncryptor.setPrime1(stoul(std::get<0>(clip)));
 				std::cout << "First prime changed to " << rsaEncryptor.getPrivateData().prime1 << "\n";
 				auto publicData = rsaEncryptor.publish();
 				std::cout << "The server has published:\n\tM = " << publicData.modularBase
@@ -306,7 +302,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 			{
 				std::cout << "Invalid value given. Must be an unsigned integer" << "\n";
 			}
-			return get<1>(clip);
+			return std::get<1>(clip);
 		});
 
 	//change second prime callsign
@@ -316,7 +312,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 			auto clip = clipOne(input);//grab the first word from input
 			try
 			{
-				rsaEncryptor.setPrime2(stoul(get<0>(clip)));
+				rsaEncryptor.setPrime2(stoul(std::get<0>(clip)));
 				std::cout << "Second prime changed to " << rsaEncryptor.getPrivateData().prime2 << "\n";
 				auto publicData = rsaEncryptor.publish();
 				std::cout << "The server has published:\n\tM = " << publicData.modularBase
@@ -327,7 +323,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 			{
 				std::cout << "Invalid value given. Must be an unsigned integer" << "\n";
 			}
-			return get<1>(clip);
+			return std::get<1>(clip);
 		});
 
 	//change exponent callsign
@@ -337,7 +333,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 			auto clip = clipOne(input);//grab the first word from input
 			try
 			{
-				rsaEncryptor.setExponent(stoul(get<0>(clip)));
+				rsaEncryptor.setExponent(stoul(std::get<0>(clip)));
 				auto publicData = rsaEncryptor.publish();
 				std::cout << "Exponent changed to " << publicData.exponent << "\n";
 				std::cout << "The server has published:\n\tM = " << publicData.modularBase
@@ -348,7 +344,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 			{
 				std::cout << "Invalid value given. Exponent must be an integer and have no common factors with (p-1)(q-1)." << "\n";
 			}
-			return get<1>(clip);
+			return std::get<1>(clip);
 		});
 	return rsaEnvironment;
 }
@@ -417,7 +413,7 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	// 		auto clip = clipOne(input);//grab the first word from input
 	// 		try
 	// 		{
-	// 			rsaEncryptor.setPrime1(stoul(get<0>(clip)));
+	// 			rsaEncryptor.setPrime1(stoul(std::get<0>(clip)));
 	// 			std::cout << "First prime changed to " << rsaEncryptor.getPrivateData().prime1 << "\n";
 	// 			auto publicData = rsaEncryptor.publish();
 	// 			std::cout << "The server has published:\n\tM = " << publicData.modularBase
@@ -428,7 +424,7 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	// 		{
 	// 			std::cout << "Invalid value given. Must be an unsigned integer" << "\n";
 	// 		}
-	// 		return get<1>(clip);
+	// 		return std::get<1>(clip);
 	// 	});
 
 	// //change second prime callsign
@@ -438,7 +434,7 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	// 		auto clip = clipOne(input);//grab the first word from input
 	// 		try
 	// 		{
-	// 			rsaEncryptor.setPrime2(stoul(get<0>(clip)));
+	// 			rsaEncryptor.setPrime2(stoul(std::get<0>(clip)));
 	// 			std::cout << "Second prime changed to " << rsaEncryptor.getPrivateData().prime2 << "\n";
 	// 			auto publicData = rsaEncryptor.publish();
 	// 			std::cout << "The server has published:\n\tM = " << publicData.modularBase
@@ -449,7 +445,7 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	// 		{
 	// 			std::cout << "Invalid value given. Must be an unsigned integer" << "\n";
 	// 		}
-	// 		return get<1>(clip);
+	// 		return std::get<1>(clip);
 	// 	});
 
 	// //change exponent callsign
@@ -459,7 +455,7 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	// 		auto clip = clipOne(input);//grab the first word from input
 	// 		try
 	// 		{
-	// 			rsaEncryptor.setExponent(stoul(get<0>(clip)));
+	// 			rsaEncryptor.setExponent(stoul(std::get<0>(clip)));
 	// 			auto publicData = rsaEncryptor.publish();
 	// 			std::cout << "Exponent changed to " << publicData.exponent << "\n";
 	// 			std::cout << "The server has published:\n\tM = " << publicData.modularBase
@@ -470,7 +466,7 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 	// 		{
 	// 			std::cout << "Invalid value given. Exponent must be an integer and have no common factors with (p-1)(q-1)." << "\n";
 	// 		}
-	// 		return get<1>(clip);
+	// 		return std::get<1>(clip);
 	// 	});
 	return rsaEnvironment;
 }

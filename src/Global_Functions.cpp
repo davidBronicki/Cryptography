@@ -1,13 +1,12 @@
-
-//Global_Functions.cpp
-
 #include "Global_Functions.hpp"
 
 #include <string>
 #include <vector>
 #include <iostream>
 
-using std::string, std::vector, std::tuple;
+using std::string;
+using std::vector;
+using std::tuple;
 
 vector<string> parse(const string& input, char delimiter)
 {

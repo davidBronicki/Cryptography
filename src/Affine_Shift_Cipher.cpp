@@ -1,12 +1,10 @@
-
-//Affine_Shift_Cipher.cpp
-
 #include "Affine_Shift_Cipher.hpp"
 
 #include <vector>
 #include <iostream>
 
-using std::string, std::vector;
+using std::string;
+using std::vector;
 
 AffineShiftCipher::AffineShiftCipher()
 :

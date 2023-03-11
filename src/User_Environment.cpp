@@ -5,7 +5,11 @@
 
 #include "Global_Functions.hpp"
 
-using std::tuple, std::string, std::vector, std::cout;
+using std::tuple;
+using std::string;
+using std::vector;
+using std::cout;
+using std::get;
 
 UserEnvironment::CallSign::CallSign(string inputDescription,
 	vector<string> inputCallSigns,

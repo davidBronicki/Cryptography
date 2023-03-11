@@ -1,12 +1,10 @@
-
-//Encoding.cpp
-
 #include "Encoding.hpp"
 // #include "ModularUtils.h"
 
 #include <stdexcept>
 
-using std::string, std::vector;
+using std::string;
+using std::vector;
 
 Alphabet::Alphabet(const string& inAlphabet)
 :

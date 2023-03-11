@@ -1,12 +1,10 @@
-
-//Columnar_Cipher.cpp
-
 #include "Columnar_Cipher.hpp"
 
 #include <algorithm>
 #include <iostream>
 
-using std::string, std::vector;
+using std::string;
+using std::vector;
 
 struct columnSortingHelper
 {

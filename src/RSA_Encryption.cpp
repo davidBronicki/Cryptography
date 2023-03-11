@@ -1,7 +1,6 @@
 #include "RSA_Encryption.hpp"
 #include "ModularUtils.hpp"
 
-
 RSA_Encryptor::RSA_Encryptor()
 :
 	prime1(3), prime2(5),
