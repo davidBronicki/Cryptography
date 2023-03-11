@@ -1,6 +1,3 @@
-
-//Columnar_Cypher.h
-
 #pragma once
 
 #include <string>

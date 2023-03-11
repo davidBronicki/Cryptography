@@ -51,11 +51,17 @@ int main(){
 		<< "Welcome to my cryptography exploration program!\n"
 		<< "You can type \"help\" for a list of commands.\n";
 
-	AffineShiftCipher affineCipher(Character::standardLowerCase, 1, 0);
+	std::string lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+	// std::string alphaNumeric("0123456789abcdefghijklmnopqrstuvwxyz");
+	// std::string decimalSet("0123456789");
+	// std::string octalSet("01234567");
+	// std::string hexSet("0123456789abcdef");
+
+	AffineShiftCipher affineCipher(lowerCaseChars, 1, 0);
 	UserEnvironment affineEnvironment(buildAffineCipherEnvironment(affineCipher));
 
 
-	ColumnarCipher columnarCipher(Character::standardLowerCase, "abcde");
+	ColumnarCipher columnarCipher(lowerCaseChars, "abcde");
 	UserEnvironment columnarEnvironment(buildColumnarCipherEnvironment(columnarCipher));
 
 

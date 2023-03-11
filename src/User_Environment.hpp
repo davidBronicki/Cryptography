@@ -1,6 +1,3 @@
-
-//User_Environment.h
-
 #pragma once
 
 #include <string>

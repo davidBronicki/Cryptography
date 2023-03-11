@@ -1,6 +1,3 @@
-
-//Encoding.h
-
 #pragma once
 
 #include "ModularUtils.hpp"

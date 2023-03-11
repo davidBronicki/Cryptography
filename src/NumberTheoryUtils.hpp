@@ -1,6 +1,3 @@
-
-//NumberTheoryUtils.h
-
 #pragma once
 
 #include <tuple>
