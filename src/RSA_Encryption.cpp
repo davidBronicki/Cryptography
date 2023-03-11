@@ -1,5 +1,5 @@
-#include "RSA_Encryption.h"
-#include "ModularUtils.h"
+#include "RSA_Encryption.hpp"
+#include "ModularUtils.hpp"
 
 
 RSA_Encryptor::RSA_Encryptor()

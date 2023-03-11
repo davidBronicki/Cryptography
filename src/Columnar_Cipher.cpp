@@ -1,7 +1,7 @@
 
 //Columnar_Cipher.cpp
 
-#include "Columnar_Cipher.h"
+#include "Columnar_Cipher.hpp"
 
 #include <algorithm>
 #include <iostream>

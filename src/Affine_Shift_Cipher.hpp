@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "Encoding.h"
+#include "Encoding.hpp"
 
 class AffineShiftCipher
 {

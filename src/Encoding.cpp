@@ -1,7 +1,7 @@
 
 //Encoding.cpp
 
-#include "Encoding.h"
+#include "Encoding.hpp"
 // #include "ModularUtils.h"
 
 #include <stdexcept>

@@ -1,12 +1,12 @@
 
 //User_Environment.cpp
 
-#include "User_Environment.h"
+#include "User_Environment.hpp"
 
 #include <string>
 #include <iostream>
 
-#include "Global_Functions.h"
+#include "Global_Functions.hpp"
 
 using namespace std;
 

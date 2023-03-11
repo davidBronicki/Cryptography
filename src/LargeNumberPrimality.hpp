@@ -1,7 +1,7 @@
 #pragma once
 
-#include "LargeNumbers.h"
-#include "LargeModularNumbers.h"
+#include "LargeNumbers.hpp"
+#include "LargeModularNumbers.hpp"
 
 #include <cstdlib>
 

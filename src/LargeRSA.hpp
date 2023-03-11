@@ -1,8 +1,8 @@
 #pragma once
 
-#include "LargeModularNumbers.h"
+#include "LargeModularNumbers.hpp"
 
-#include "Encoding.h"
+#include "Encoding.hpp"
 
 template<size_t primeNumberSize>
 class Large_RSA_Encryptor

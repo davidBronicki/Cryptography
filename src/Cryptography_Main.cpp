@@ -6,16 +6,16 @@
 #include <iostream>
 #include <functional>
 
-#include "User_Environment.h"
-#include "Affine_Shift_Cipher.h"
-#include "Columnar_Cipher.h"
-#include "RSA_Encryption.h"
-#include "Character_Set.h"
-#include "Global_Functions.h"
+#include "User_Environment.hpp"
+#include "Affine_Shift_Cipher.hpp"
+#include "Columnar_Cipher.hpp"
+#include "RSA_Encryption.hpp"
+#include "Character_Set.hpp"
+#include "Global_Functions.hpp"
 
 // #include "LargeNumbers.h"
-#include "LargeRSA.h"
-#include "LargeNumberPrimality.h"
+#include "LargeRSA.hpp"
+#include "LargeNumberPrimality.hpp"
 
 #define primeSize 16
 

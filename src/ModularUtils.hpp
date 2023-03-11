@@ -1,6 +1,3 @@
-
-//ModularUtils.h
-
 #pragma once
 
 class Alphabet;

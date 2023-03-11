@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "Encoding.h"
+#include "Encoding.hpp"
 
 class ColumnarCipher
 {

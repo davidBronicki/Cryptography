@@ -1,7 +1,7 @@
 
 //NumberTheoryUtils.cpp
 
-#include "NumberTheoryUtils.h"
+#include "NumberTheoryUtils.hpp"
 
 #include <math.h>
 #include <iostream>

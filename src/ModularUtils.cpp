@@ -1,12 +1,9 @@
+#include "ModularUtils.hpp"
 
-//ModularUtils.cpp
-
-#include "ModularUtils.h"
-
-#include <exception>
+#include <stdexcept>
 #include <vector>
 
-#include "NumberTheoryUtils.h"
+#include "NumberTheoryUtils.hpp"
 
 using namespace std;
 

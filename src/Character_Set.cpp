@@ -2,7 +2,7 @@
 //Character_Set.cpp
 //depricated
 
-#include "Character_Set.h"
+#include "Character_Set.hpp"
 
 string Character::standardLowerCase("abcdefghijklmnopqrstuvwxyz");
 string Character::alphaNumeric("0123456789abcdefghijklmnopqrstuvwxyz");
