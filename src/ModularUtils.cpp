@@ -5,8 +5,6 @@
 
 #include "NumberTheoryUtils.hpp"
 
-using namespace std;
-
 ModularNumber::ModularNumber()
 :
 	base(1),
@@ -80,7 +78,7 @@ ModularNumber ModularNumber::inverse() const
 {
 	if (inverseValue == 0)
 	{
-		throw domain_error("Modular Division by Zero Divisor");
+		throw std::domain_error("Modular Division by Zero Divisor");
 	}
 	return ModularNumber(base, inverseValue, value);
 }
@@ -89,7 +87,7 @@ ModularNumber& ModularNumber::operator+=(const ModularNumber& other)
 {
 	if (base != other.base)
 	{
-		throw domain_error("Modular Base Mismatch in Addition Function");
+		throw std::domain_error("Modular Base Mismatch in Addition Function");
 	}
 	value += other.value;
 	if (value >= base) value -= base;
@@ -106,7 +104,7 @@ ModularNumber& ModularNumber::operator*=(const ModularNumber& other)
 {
 	if (base != other.base)
 	{
-		throw domain_error("Modular Base Mismatch in Multiplication Function");
+		throw std::domain_error("Modular Base Mismatch in Multiplication Function");
 	}
 	value *= other.value;
 	value %= base;

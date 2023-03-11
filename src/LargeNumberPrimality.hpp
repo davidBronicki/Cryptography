@@ -16,7 +16,7 @@ LargeNumber<bit32Length> generateRandomNumber(
 
 	while(true)
 	{
-		vector<unsigned int> data;
+		std::vector<unsigned int> data;
 		for (int i = 0; i < bit32Length; ++i)
 		{
 			data.push_back(rand());
@@ -29,11 +29,11 @@ LargeNumber<bit32Length> generateRandomNumber(
 }
 
 template<size_t bit32Length>
-vector<LargeNumber<bit32Length>> buildTestCases(
+std::vector<LargeNumber<bit32Length>> buildTestCases(
 	const LargeNumber<bit32Length>& maxSize,
 	const size_t& count)
 {
-	vector<LargeNumber<bit32Length>> output(0);
+	std::vector<LargeNumber<bit32Length>> output(0);
 	for (int i = 0; i < count; ++i)
 	{
 		output.push_back(generateRandomNumber(
@@ -86,7 +86,7 @@ bool isPrime(const LargeNumber<bit32Length>& input)
 		++powersOfTwo;
 	}
 
-	static vector<num> testCases(buildTestCases(input, 10));
+	static std::vector<num> testCases(buildTestCases(input, 10));
 
 	for (auto testCase : testCases)
 	{
@@ -110,7 +110,7 @@ bool isPrime(const LargeNumber<bit32Length>& input)
 	return true;
 }
 
-const unsigned int buildPreSieveProduct(const vector<unsigned int>& primes)
+const unsigned int buildPreSieveProduct(const std::vector<unsigned int>& primes)
 {
 	int preSieveProduct = 1;
 	for (auto i : primes)
@@ -120,9 +120,9 @@ const unsigned int buildPreSieveProduct(const vector<unsigned int>& primes)
 	return preSieveProduct;
 }
 
-const vector<unsigned int> buildDropLength(const vector<unsigned int>& primes, const int& product)
+const std::vector<unsigned int> buildDropLength(const std::vector<unsigned int>& primes, const int& product)
 {
-	vector<bool> sieve(product, true);
+	std::vector<bool> sieve(product, true);
 	sieve[0] = false;
 	sieve[1] = false;
 	for (int i = 2; i < product; ++i)
@@ -135,12 +135,12 @@ const vector<unsigned int> buildDropLength(const vector<unsigned int>& primes, c
 			}
 		}
 	}
-	vector<unsigned int> relativePrimes;
+	std::vector<unsigned int> relativePrimes;
 	for (int i = 0; i < sieve.size(); ++i)
 	{
 		if (sieve[i]) relativePrimes.push_back(i);
 	}
-	vector<unsigned int> dropLengths;
+	std::vector<unsigned int> dropLengths;
 	for (int i = relativePrimes.size() - 1; i > 0; --i)
 	{
 		dropLengths.push_back(relativePrimes[i] - relativePrimes[i - 1]);
@@ -153,10 +153,10 @@ template<size_t bit32Length>
 LargeNumber<bit32Length> generatePrime(const LargeNumber<bit32Length>& maxSize)
 {
 	typedef LargeNumber<bit32Length> num;
-	const static vector<unsigned int> preSievePrimes{2, 3, 5, 7, 11, 13, 17, 19};
+	const static std::vector<unsigned int> preSievePrimes{2, 3, 5, 7, 11, 13, 17, 19};
 	// const static vector<unsigned int> preSievePrimes{2, 3, 5, 7, 11};
 	const static num preSieveProduct(buildPreSieveProduct(preSievePrimes));
-	const static vector<unsigned int> dropLength(buildDropLength(preSievePrimes, preSieveProduct));
+	const static std::vector<unsigned int> dropLength(buildDropLength(preSievePrimes, preSieveProduct));
 
 	num testPoint(generateRandomNumber(preSieveProduct, maxSize));
 	testPoint -= (testPoint % preSieveProduct);

@@ -6,9 +6,9 @@
 
 #include <stdexcept>
 
-using namespace std;
+using std::string, std::vector;
 
-Alphabet::Alphabet(const std::string& inAlphabet)
+Alphabet::Alphabet(const string& inAlphabet)
 :
 	alphabet(inAlphabet)
 {
@@ -33,7 +33,7 @@ char Alphabet::numericToChar(const ModularNumber& input) const
 {
 	if (input.getBase() != alphabet.length())
 	{
-		throw domain_error("alphabet length does not match modular base");
+		throw std::domain_error("alphabet length does not match modular base");
 	}
 	return alphabet[input.value];
 }
@@ -78,7 +78,7 @@ ModularNumber Alphabet::charToNumeric(char input) const
 				i, inverseValues[i]);
 		}
 	}
-	throw invalid_argument("char input does not exist in alphabet");
+	throw std::invalid_argument("char input does not exist in alphabet");
 }
 
 vector<ModularNumber> Alphabet::stringToNumeric(const string& input) const
@@ -100,7 +100,7 @@ vector<ModularNumber> Alphabet::forceStringToNumeric(const string& input) const
 		{
 			output.push_back(charToNumeric(letter));
 		}
-		catch (invalid_argument e)
+		catch (std::invalid_argument e)
 		{
 			continue;
 		}

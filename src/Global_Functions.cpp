@@ -7,7 +7,7 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
+using std::string, std::vector, std::tuple;
 
 vector<string> parse(const string& input, char delimiter)
 {

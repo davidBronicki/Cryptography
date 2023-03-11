@@ -53,7 +53,7 @@ public:
 		return exponentBase;
 	}
 
-	ul encode(const string& plainText)
+	ul encode(const std::string& plainText)
 	{
 		return ul(ASCII_Encoder::encode(plainText, 2 * sizeof(unsigned int) * primeNumberSize));
 	}
@@ -69,7 +69,7 @@ public:
 		return ul(value.exponentiate(inverse));
 	}
 
-	string decode(const ul& code)
+	std::string decode(const ul& code)
 	{
 		return ASCII_Encoder::decode(code.getData());
 	}

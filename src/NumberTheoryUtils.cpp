@@ -1,13 +1,9 @@
-
-//NumberTheoryUtils.cpp
-
 #include "NumberTheoryUtils.hpp"
 
 #include <math.h>
 #include <iostream>
 
-using namespace std;
-using namespace ntu;
+using std::tuple, std::vector, ntu::PrimeNumbers;
 
 typedef tuple<long long, long long, long long> vec3;
 
@@ -43,7 +39,7 @@ bool ntu::divides(long long a, long long b)
 //---------------------prime numbers segment--------------------
 
 
-PrimeNumbers::PrimeNumbers(ull inputmaxPrime)
+PrimeNumbers::PrimeNumbers(ntu::ull inputmaxPrime)
 :
 	maxPrime(inputmaxPrime)
 {
@@ -51,31 +47,31 @@ PrimeNumbers::PrimeNumbers(ull inputmaxPrime)
 	vector<bool> isPrime(inputmaxPrime + 1, true);
 	isPrime[0] = false;
 	isPrime[1] = false;
-	for (ull i = 0; i < inputmaxPrime + 1; ++i)
+	for (ntu::ull i = 0; i < inputmaxPrime + 1; ++i)
 	{
 		if (isPrime[i])
 		{
-			for (ull j = 2 * i; j < inputmaxPrime + 1; j += i)
+			for (ntu::ull j = 2 * i; j < inputmaxPrime + 1; j += i)
 			{
 				isPrime[j] = false;
 			}
 		}
 	}
-	for (ull i = 0; i < inputmaxPrime + 1; ++i)
+	for (ntu::ull i = 0; i < inputmaxPrime + 1; ++i)
 	{
 		if (isPrime[i]) primeNumbers.push_back(i);
 	}
 }
 
-void PrimeNumbers::extendMaxPrime(ull inputmaxPrime)
+void PrimeNumbers::extendMaxPrime(ntu::ull inputmaxPrime)
 {
-	for (ull i = maxPrime; i < inputmaxPrime + 1; ++i)
+	for (ntu::ull i = maxPrime; i < inputmaxPrime + 1; ++i)
 	{
 		if (isPrime(i)) primeNumbers.push_back(i);
 	}
 }
 
-PrimeNumbers& PrimeNumbers::getInstance(ull inputmaxPrime)
+PrimeNumbers& PrimeNumbers::getInstance(ntu::ull inputmaxPrime)
 {
 	static PrimeNumbers globalInstance(inputmaxPrime);//only called first time through
 	if (globalInstance.maxPrime < inputmaxPrime)
@@ -85,11 +81,11 @@ PrimeNumbers& PrimeNumbers::getInstance(ull inputmaxPrime)
 	return globalInstance;
 }
 
-bool PrimeNumbers::isPrime(ull value) const
+bool PrimeNumbers::isPrime(ntu::ull value) const
 {
 	if (value <= maxPrime)//if in prime pool, we can do a binary search
 	{
-		for (ull prime : primeNumbers)
+		for (ntu::ull prime : primeNumbers)
 		{
 			if (value == prime) return true;
 			if (value > prime) return false;
@@ -98,7 +94,7 @@ bool PrimeNumbers::isPrime(ull value) const
 	}
 	else if (value <= sqrt(maxPrime))//if sqrt in prime pool, we can check divisibility
 	{
-		for (ull prime : primeNumbers)
+		for (ntu::ull prime : primeNumbers)
 		{
 			if (divides(prime, value)) return false;
 		}
@@ -106,11 +102,11 @@ bool PrimeNumbers::isPrime(ull value) const
 	}
 	else//if above square of prime pool, must check each value above prime pool (inefficient)
 	{
-		for (ull prime : primeNumbers)
+		for (ntu::ull prime : primeNumbers)
 		{
 			if (divides(prime, value)) return false;
 		}
-		for (ull i = maxPrime * maxPrime; i <= sqrt(value); ++i)
+		for (ntu::ull i = maxPrime * maxPrime; i <= sqrt(value); ++i)
 		{
 			if (divides(i, value)) return false;
 		}
@@ -118,14 +114,14 @@ bool PrimeNumbers::isPrime(ull value) const
 	}
 }
 
-vector<ull> PrimeNumbers::reverseFactorize(ull value) const
+vector<ntu::ull> PrimeNumbers::reverseFactorize(ntu::ull value) const
 {
 	//The value checked gets appended to the back of a recursion call.
 	//Since the values are checked in accending order, this results
 	//in the return being in decending order.
 	//This algorithm is somewhat inefficient.
-	if (value == 1) return vector<ull>();
-	for (ull prime : primeNumbers)
+	if (value == 1) return vector<ntu::ull>();
+	for (ntu::ull prime : primeNumbers)
 	{
 		if (divides(prime, value))
 		{
@@ -134,13 +130,13 @@ vector<ull> PrimeNumbers::reverseFactorize(ull value) const
 			return temp;
 		}
 	}
-	return vector<ull>();
+	return vector<ntu::ull>();
 }
 
-vector<ull> PrimeNumbers::factorize(ull value) const
+vector<ntu::ull> PrimeNumbers::factorize(ntu::ull value) const
 {
 	auto temp = reverseFactorize(value);
-	vector<ull> output;
+	vector<ntu::ull> output;
 	for (auto it = temp.end() - 1; it != temp.begin() - 1; --it)
 	{
 		output.push_back(*it);
@@ -148,19 +144,15 @@ vector<ull> PrimeNumbers::factorize(ull value) const
 	return output;
 }
 
-vector<ull> PrimeNumbers::uniqueFactors(ull value) const
+vector<ntu::ull> PrimeNumbers::uniqueFactors(ntu::ull value) const
 {
 	auto factors = factorize(value);
 	if (factors.size() == 0) return factors;
-	vector<ull> output({factors[0]});
-	for (ull factor : factors)
+	vector<ntu::ull> output({factors[0]});
+	for (ntu::ull factor : factors)
 	{
 		if (factor == output.back()) continue;
 		output.push_back(factor); 
 	}
 	return output;
 }
-
-
-//------------------end of prime numbers segment---------------------
-

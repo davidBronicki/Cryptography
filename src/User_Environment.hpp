@@ -8,35 +8,33 @@
 #include <vector>
 #include <functional>
 
-using namespace std;
-
-typedef function<string(string)> callableObject;
+typedef std::function<std::string(std::string)> callableObject;
 
 class UserEnvironment
 {
 	class CallSign
 	{
-		string description;
-		vector<string> callSigns;
+		std::string description;
+		std::vector<std::string> callSigns;
 		callableObject callOperation;
 	public:
-		CallSign(string inputDescription,
-			vector<string> inputCallSigns,
+		CallSign(std::string inputDescription,
+			std::vector<std::string> inputCallSigns,
 			callableObject inputCallOperation);
-		tuple<bool, string> operator()(const tuple<string, string>& inputString);
+		std::tuple<bool, std::string> operator()(const std::tuple<std::string, std::string>& inputString);
 		void printDescription();
 	};
 	static CallSign exitSign, helpCall;
-	vector<CallSign> availableCalls;
-	string name;
-	string description;
-	string handleInput(const string& input);//return true if exit called
+	std::vector<CallSign> availableCalls;
+	std::string name;
+	std::string description;
+	std::string handleInput(const std::string& input);//return true if exit called
 	void printHelp();
 public:
 	UserEnvironment();
-	UserEnvironment(string inputName, string inputDescription);
-	string enterEnvironment();
-	string enterEnvironment(const string& input);
-	void addCallSign(string description, vector<string> callSigns,
+	UserEnvironment(std::string inputName, std::string inputDescription);
+	std::string enterEnvironment();
+	std::string enterEnvironment(const std::string& input);
+	void addCallSign(std::string description, std::vector<std::string> callSigns,
 		callableObject callOperation);
 };

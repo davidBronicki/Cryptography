@@ -13,7 +13,7 @@ class LargeModularNumber
 	ull base;//base of the modular arithmetic
 	ull value;//0 <= value < base
 	void buildInverse();
-	typedef tuple<ul, ul, ul, bool> vec3;//last value true means 3rd value negative,
+	typedef std::tuple<ul, ul, ul, bool> vec3;//last value true means 3rd value negative,
 	//last value false means 2nd value negative
 
 	static void advancedEuclideanAlgorithmRecursive(vec3& n, vec3& m)
@@ -69,7 +69,7 @@ public:
 		}
 		else
 		{
-			throw domain_error("Modular Division by Zero Divisor");
+			throw std::domain_error("Modular Division by Zero Divisor");
 		}
 	}
 	

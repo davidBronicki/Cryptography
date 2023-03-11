@@ -1,6 +1,3 @@
-
-//User_Environment.cpp
-
 #include "User_Environment.hpp"
 
 #include <string>
@@ -8,7 +5,7 @@
 
 #include "Global_Functions.hpp"
 
-using namespace std;
+using std::tuple, std::string, std::vector, std::cout;
 
 UserEnvironment::CallSign::CallSign(string inputDescription,
 	vector<string> inputCallSigns,
@@ -25,16 +22,17 @@ UserEnvironment::CallSign::CallSign(string inputDescription,
 
 void UserEnvironment::CallSign::printDescription()
 {
-	cout << "Primary callsign: " << callSigns[0] << endl;
-	cout << description << endl;
-	cout << "Possible callsigns: ";
+	cout
+		<< "Primary callsign: " << callSigns[0] << "\n"
+		<< description << "\n"
+		<< "Possible callsigns: ";
 	string temp;
 	for (string sign : callSigns)
 	{
 		temp += sign;
 		temp += ", ";
 	}
-	cout << temp.substr(0, temp.length() - 2) << endl;
+	cout << temp.substr(0, temp.length() - 2) << "\n";
 }
 
 tuple<bool, string> UserEnvironment::CallSign::operator()(const tuple<string, string>& inputStrings)
@@ -47,7 +45,7 @@ tuple<bool, string> UserEnvironment::CallSign::operator()(const tuple<string, st
 			return make_tuple(true, callOperation(get<1>(inputStrings)));
 		}
 	}
-	return make_tuple(false, "");
+	return std::make_tuple(false, "");
 }
 
 UserEnvironment::CallSign UserEnvironment::exitSign(
@@ -77,19 +75,19 @@ UserEnvironment::UserEnvironment(string inputName, string inputDescription)
 
 void UserEnvironment::printHelp()
 {
-	cout << endl;
-	cout << "Current environment: " << name << endl;
-	cout << "Description: " << description << endl;
-	cout << endl << "Available calls: " << endl << endl;
+	cout << "\n"
+		<< "Current environment: " << name << "\n"
+		<< "Description: " << description << "\n\n"
+		<< "Available calls:\n\n";
 	helpCall.printDescription();
-	cout << endl;
+	cout << "\n";
 	exitSign.printDescription();
 	for (auto call : availableCalls)
 	{
-		cout << endl;
+		cout << "\n";
 		call.printDescription();
 	}
-	cout << endl;
+	cout << "\n";
 }
 
 string UserEnvironment::handleInput(const string& input)
@@ -115,7 +113,7 @@ string UserEnvironment::enterEnvironment()
 	while (true)
 	{
 		string input;
-		getline(cin, input);
+		std::getline(std::cin, input);
 		string output = handleInput(input);
 		if (output != "") return output;
 	}

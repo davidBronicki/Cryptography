@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <iostream>
 
-using namespace std;
+using std::string, std::vector;
 
 struct columnSortingHelper
 {

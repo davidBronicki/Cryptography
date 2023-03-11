@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
+using std::string, std::vector;
 
 AffineShiftCipher::AffineShiftCipher()
 :

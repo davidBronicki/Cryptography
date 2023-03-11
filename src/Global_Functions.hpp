@@ -7,9 +7,7 @@
 #include <vector>
 #include <tuple>
 
-using namespace std;
-
-vector<string> parse(const string& input, char delimiter = ' ');
-tuple<string, string> clipOne(const string& input, char delimiter = ' ');
-string fullConcat(const vector<string>& input, string pad = "");
-string removeCase(const string& input);
+std::vector<std::string> parse(const std::string& input, char delimiter = ' ');
+std::tuple<std::string, std::string> clipOne(const std::string& input, char delimiter = ' ');
+std::string fullConcat(const std::vector<std::string>& input, std::string pad = "");
+std::string removeCase(const std::string& input);

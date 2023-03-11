@@ -11,8 +11,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 template<size_t loopLength, size_t i, typename functionFootprint>
 class UnravelledForLoop
 {
@@ -79,7 +77,7 @@ inline void reverseUnravelledForLoop(const functionFootprint& loopCodeBlock)
 
 
 template<size_t bit32Length,//number of 32 bit ints composing the number
-	class sizeCheck = enable_if<bit32Length != 0>>//0 size numbers not allowed
+	class sizeCheck = std::enable_if<bit32Length != 0>>//0 size numbers not allowed
 class LargeNumber
 {
 	typedef unsigned long long ull;
@@ -105,9 +103,9 @@ public:
 		data[0] = inputNumber;
 	}
 
-	LargeNumber(const vector<unsigned int>& inputData)
+	LargeNumber(const std::vector<unsigned int>& inputData)
 	{
-		if (inputData.size() != bit32Length) throw invalid_argument(
+		if (inputData.size() != bit32Length) throw std::invalid_argument(
 			"passed wrongly sized initial data for LargeNumber class");
 		unravelledForLoop<bit32Length>([this, &inputData](size_t i)
 		{
@@ -159,9 +157,9 @@ public:
 		return maxValue;
 	}
 
-	vector<unsigned int> getData() const
+	std::vector<unsigned int> getData() const
 	{
-		vector<unsigned int> output(bit32Length);
+		std::vector<unsigned int> output(bit32Length);
 		for (int i = 0; i < bit32Length; ++i)
 		{
 			output[bit32Length - i - 1] = data[i];
@@ -237,7 +235,7 @@ public:
 		return returnValue;
 	}
 
-	template<typename T, typename = typename enable_if<is_integral<T>::value && is_unsigned<T>::value>::type>
+	template<typename T, typename = typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value>::type>
 	LargeNumber<bit32Length>& operator<<=(const T& shiftValue)
 	{
 		unsigned int wordShift = shiftValue >> 5;//number of words we need to shift by
@@ -279,7 +277,7 @@ public:
 		return *this;
 	}
 
-	template<typename T, typename = typename enable_if<is_integral<T>::value && is_unsigned<T>::value>::type>
+	template<typename T, typename = typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value>::type>
 	LargeNumber<bit32Length>& operator>>=(const T& shiftValue)
 	{
 		unsigned int wordShift = shiftValue >> 5;//number of words we need to shift by
@@ -422,27 +420,27 @@ public:
 };
 
 template<size_t bit32Length>
-ostream& operator<<(ostream& os, const LargeNumber<bit32Length>& other)
+std::ostream& operator<<(std::ostream& os, const LargeNumber<bit32Length>& other)
 {
 	auto data = other.getData();
 	unravelledForLoop<bit32Length - 1>([&os, &data](size_t i)
 	{
-		os << hex << data[i];
+		os << std::hex << data[i];
 		os << ' ';
 	});
-	os << hex << data[bit32Length - 1] << dec;
+	os << std::hex << data[bit32Length - 1] << std::dec;
 	return os;
 }
 
 template<size_t bit32Length, typename T,
-	typename = typename enable_if<is_integral<T>::value && is_unsigned<T>::value>::type>
+	typename = typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value>::type>
 LargeNumber<bit32Length> operator<<(LargeNumber<bit32Length> lhs, const T& rhs)
 {
 	return lhs <<= rhs;
 }
 
 template<size_t bit32Length, typename T,
-	typename = typename enable_if<is_integral<T>::value && is_unsigned<T>::value>::type>
+	typename = typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value>::type>
 LargeNumber<bit32Length> operator>>(LargeNumber<bit32Length> lhs, const T& rhs)
 {
 	return lhs >>= rhs;
