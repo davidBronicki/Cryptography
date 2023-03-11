@@ -15,21 +15,6 @@
 
 constexpr size_t primeSize = 16;
 
-#define SET_ENCRYPTION_CALLSIGN(ENVIRONMENT, CRYPTOGRAPHER)\
-ENVIRONMENT.addCallSign("Encrypt a given message.", {"encrypt"},\
-	[&CRYPTOGRAPHER](std::string arg) -> std::string\
-	{\
-		std::cout << "Cipher Text: " << CRYPTOGRAPHER.encrypt(arg) << "\n";\
-		return "";\
-	})
-#define SET_DECRYPTION_CALLSIGN(ENVIRONMENT, CRYPTOGRAPHER)\
-ENVIRONMENT.addCallSign("Encrypt a given message.", {"decrypt"},\
-	[&CRYPTOGRAPHER](std::string arg) -> std::string\
-	{\
-		std::cout << "Plain Text: " << CRYPTOGRAPHER.decrypt(arg) << "\n";\
-		return "";\
-	})
-
 UserEnvironment buildAffineCipherEnvironment(AffineShiftCipher& affineCipher);
 UserEnvironment buildColumnarCipherEnvironment(ColumnarCipher& columnarCipher);
 UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor);
@@ -146,7 +131,10 @@ UserEnvironment buildGroundEnvironment(
 {
 	UserEnvironment groundEnvironment(
 		"Ground Environment",
-		"Base environment, serves as the entry point of the program and a place to choose which encryption environment you would like to enter.");
+		"Base environment, serves as the entry point of the program and a place \
+to choose which encryption environment you would like to enter.\n\n\
+Each \"Callsign\" is what you can type in to run a command. \
+Each command has a primary callsign as well as alternative callsigns you can use.");
 	groundEnvironment.addCallSign("Affine Cipher Environment.", {"affine", "affine_cipher"},
 		[&affineCipher, &affineEnvironment](std::string input) -> std::string
 		{
@@ -178,21 +166,47 @@ UserEnvironment buildGroundEnvironment(
 UserEnvironment buildAffineCipherEnvironment(AffineShiftCipher& affineCipher)
 {
 	UserEnvironment affineEnvironment(
-		"Affine Environment", "Affine cipher environment, \
+		"Affine Environment", "The affine cipher environment \
 serves as a user interface with an affine encryptor and decryptor. An affine cipher \
 uses modular arithmetic on some alphabet. Namely, it take the input (plain text) and \
-multiplies it by some number, here called the multiplier, and adds a different number, \
-here called the shift. In modular arithmetic, this results in something back inside \
+multiplies it by some number (multiplier) and adds a different number (shift). \
+In modular arithmetic, this results in something back inside \
 our alphabet and is the final output (cipher text).");
-	SET_ENCRYPTION_CALLSIGN(affineEnvironment, affineCipher);
-	SET_DECRYPTION_CALLSIGN(affineEnvironment, affineCipher);
-	affineEnvironment.addCallSign("Change multiplier.", {"mult", "multiplier"},
+	affineEnvironment.addCallSign("Encrypt a given string. Must use only lower case letters.", {"encrypt"},
+		[&affineCipher](std::string arg) -> std::string
+		{
+			try
+			{
+				std::cout << "Encrypted Number: " << affineCipher.encrypt(arg) << "\n";
+			}
+			catch(...)
+			{
+				std::cout << "Invalid value given. Must be a string with only lower case letters." << "\n";
+			}
+			return "";
+		});
+
+	affineEnvironment.addCallSign("Decrypt a given string. Must use only lower case letters.", {"decrypt"},
+		[&affineCipher](std::string arg) -> std::string
+		{
+			try
+			{
+				std::cout << "Encrypted Number: " << affineCipher.decrypt(arg) << "\n";
+			}
+			catch(...)
+			{
+				std::cout << "Invalid value given. Must be a string with only lower case letters." << "\n";
+			}
+			return "";
+		});
+
+	affineEnvironment.addCallSign("Change multiplier. Accepts one unsigned integer relatively prime to 26.", {"mult", "multiplier"},
 		[&affineCipher](std::string input) -> std::string
 		{
 			auto clip = clipOne(input);
 			try
 			{
-				affineCipher.setMult(stoll(std::get<0>(clip)));
+				affineCipher.setMult(stoull(std::get<0>(clip)));
 				std::cout << "Multiplier changed to " << affineCipher.getMult() << "\n";
 			}
 			catch(...)
@@ -201,7 +215,7 @@ our alphabet and is the final output (cipher text).");
 			}
 			return std::get<1>(clip);
 		});
-	affineEnvironment.addCallSign("Change shift.", {"shift"},
+	affineEnvironment.addCallSign("Change shift. Accepts one unsigned integer relatively prime to 26.", {"shift"},
 		[&affineCipher](std::string input) -> std::string
 		{
 			auto clip = clipOne(input);//grab the first word from input
@@ -224,11 +238,40 @@ our alphabet and is the final output (cipher text).");
 UserEnvironment buildColumnarCipherEnvironment(ColumnarCipher& columnarCipher)
 {
 	UserEnvironment columnarEnvironment(
-		"Columnar Environment", "Columnar cipher environment, \
-serves as a user interface with an columnar encryptor and decryptor. ");
-	SET_ENCRYPTION_CALLSIGN(columnarEnvironment, columnarCipher);
-	SET_DECRYPTION_CALLSIGN(columnarEnvironment, columnarCipher);
-	columnarEnvironment.addCallSign("Change encryption Key.", {"key"},
+		"Columnar Environment", "The columnar cipher environment \
+serves as a user interface with a columnar encryptor and decryptor. \
+This cipher writes the message to a grid in row major order and reads it \
+back in column major order. The columns are also rearranged according \
+to the permutation needed to put the key into alphabetical order.");
+	columnarEnvironment.addCallSign("Encrypt a given string.", {"encrypt"},
+		[&columnarCipher](std::string arg) -> std::string
+		{
+			try
+			{
+				std::cout << "Encrypted Number: " << columnarCipher.encrypt(arg) << "\n";
+			}
+			catch(...)
+			{
+				std::cout << "Invalid value given. Arbitrary text is allowed; this is an internal error." << "\n";
+			}
+			return "";
+		});
+
+	columnarEnvironment.addCallSign("Decrypt a given string.", {"decrypt"},
+		[&columnarCipher](std::string arg) -> std::string
+		{
+			try
+			{
+				std::cout << "Encrypted Number: " << columnarCipher.decrypt(arg) << "\n";
+			}
+			catch(...)
+			{
+				std::cout << "Invalid value given. Arbitrary text is allowed; this is an internal error." << "\n";
+			}
+			return "";
+		});
+
+	columnarEnvironment.addCallSign("Change encryption Key to a given string.", {"key"},
 		[&columnarCipher](std::string input) -> std::string
 		{
 			auto clip = clipOne(input);//grab the first word from input
@@ -249,8 +292,14 @@ serves as a user interface with an columnar encryptor and decryptor. ");
 UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 {
 	UserEnvironment rsaEnvironment(
-		"RSA Encryption Environment", "RSA encryption environment, \
-			serves as a user interface with a RSA encryptor and decryptor.");
+		"RSA Encryption Environment",
+		"The RSA encryption environment serves as a user interface with an \
+RSA encryptor and decryptor. RSA is the theoretically most sophisticated algorithm \
+implemented in this program. This algorithm uses two primes, p and q, (whose size dictates \
+the level of security of the system) and works in a number system modulo n=pq. In this system, \
+a pair of exponential inverses can be made, e and d. (I.e., (x^e)^d = x mod n for all x) \
+The server then publishes e and n. By keeping p, q, and d secret, secure messages can \
+be sent from the public to the server.");
 
 	//encryption callsign
 	rsaEnvironment.addCallSign("Encrypt a given number.", {"encrypt"},
@@ -285,7 +334,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 		});
 
 	//change first prime callsign
-	rsaEnvironment.addCallSign("Change the first prime number.", {"prime1", "p1"},
+	rsaEnvironment.addCallSign("Change the first prime to a given number.", {"prime1", "p1"},
 		[&rsaEncryptor](std::string input) -> std::string
 		{
 			auto clip = clipOne(input);//grab the first word from input
@@ -306,7 +355,7 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 		});
 
 	//change second prime callsign
-	rsaEnvironment.addCallSign("Change the second prime number.", {"prime2", "p2"},
+	rsaEnvironment.addCallSign("Change the second prime to a given number.", {"prime2", "p2"},
 		[&rsaEncryptor](std::string input) -> std::string
 		{
 			auto clip = clipOne(input);//grab the first word from input
@@ -352,17 +401,10 @@ UserEnvironment buildRSA_EncryptionEnvironment(RSA_Encryptor& rsaEncryptor)
 UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSize>& rsaEncryptor)
 {
 	UserEnvironment rsaEnvironment(
-		"Large RSA Encryption Environment", "RSA encryption environment using large number arithmetic, \
-			serves as a user interface with a RSA encryptor and decryptor. Unlike the other rsa \
-			rsa environment, this one uses 512 bit primes and a 1024 bit modular base.");
-
-	//description of what makes this encryptor so special
-	rsaEnvironment.addCallSign("Describe the mechanism.", {"description", "describe"},
-		[](std::string arg) -> std::string
-		{
-			std::cout << "" << "\n";
-			return arg;
-		});
+		"Large RSA Encryption Environment", "The large number RSA encryption environment \
+serves as a user interface with an RSA encryptor and decryptor. Unlike the non-large RSA \
+environment, this one uses 512 bit primes and a 1024 bit modular base. See the \
+non-large variant for a more detailed description of RSA.");
 
 	//encryption callsign
 	rsaEnvironment.addCallSign("Encrypt a given message of 124 characters or less.", {"encrypt"},
@@ -373,7 +415,8 @@ UserEnvironment buildLargeRSA_EncryptionEnvironment(Large_RSA_Encryptor<primeSiz
 		});
 
 	// //decryption callsign
-	rsaEnvironment.addCallSign("Decrypt a given number into a plaintext message.", {"decrypt"},
+	rsaEnvironment.addCallSign("Decrypt a given number into a plaintext message.\
+Accepts 32 space seperated 32-bit numbers in hex format.", {"decrypt"},
 		[&rsaEncryptor](std::string arg) -> std::string
 		{
 			std::vector<std::string> inputStrings(parse(arg));

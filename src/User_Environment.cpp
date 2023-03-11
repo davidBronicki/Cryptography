@@ -52,17 +52,15 @@ tuple<bool, string> UserEnvironment::CallSign::operator()(const tuple<string, st
 	return std::make_tuple(false, "");
 }
 
-UserEnvironment::CallSign UserEnvironment::exitSign(
+UserEnvironment::CallSign UserEnvironment::exitCall(
 	"Exit the current user environment.",
-	vector<string>{"exit", "done", "back"},
+	vector<string>{"exit", "done", "back", "up", "quit", "q"},
 	[](string argument) -> string {return "";});
 
 UserEnvironment::CallSign UserEnvironment::helpCall(
 	"Gives descriptor of current environment.",
-	vector<string>{"help", "h"},
+	vector<string>{"help", "h", "ls"},
 	[](string argument) -> string {return "";});
-
-
 
 
 UserEnvironment::UserEnvironment()
@@ -85,7 +83,7 @@ void UserEnvironment::printHelp()
 		<< "Available calls:\n\n";
 	helpCall.printDescription();
 	cout << "\n";
-	exitSign.printDescription();
+	exitCall.printDescription();
 	for (auto call : availableCalls)
 	{
 		cout << "\n";
@@ -95,10 +93,10 @@ void UserEnvironment::printHelp()
 }
 
 string UserEnvironment::handleInput(const string& input)
-{//return true if exit called
+{
 	if (input == "") return "";
 	auto clip = clipOne(input);
-	if (get<0>(exitSign(clip))) return get<1>(clip) == "" ? "pass" : get<1>(clip);
+	if (get<0>(exitCall(clip))) return get<1>(clip) == "" ? "pass" : get<1>(clip);
 	if (get<0>(helpCall(clip)))
 	{
 		printHelp();
